@@ -1,0 +1,296 @@
+﻿@{
+    ViewBag.Title = "Danh mục sản phẩm";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Sản phẩm</h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="col-lg-12" style="padding-left:0px;">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@ViewBag.Title</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="container-fluid">
+                        
+                        <div class="row" style="margin-bottom:8px;">
+                            <!--actions-->
+                            <div class="col-lg-4" style="padding-left:0px;">
+                                <div class="form-inline text-left">
+                                    <a href="javascript:add()" class="btn btn-sm btn-success" style="width:50px;">Thêm</a>
+                                    <a href="javascript:edit()" class="btn btn-sm btn-primary" style="width:50px;">Sửa</a>
+                                    <a href="javascript:remove()" class="btn btn-sm btn-danger" style="width:50px;">Xóa</a>
+                                    <a href="javascript:moveUp()" class="btn btn-sm btn-default" style="width:50px;">Lên</a>
+                                    <a href="javascript:moveDown()" class="btn btn-sm btn-default" style="width:50px;">Xuống</a>
+                                </div>
+                            </div>
+                            <!--category tree-->
+                            <div class="col-lg-8" style="padding-left:0px;">
+                                <div id="tree"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section styles {
+    <link href="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet" />
+}
+@section scripts {
+    <script src="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.js"></script>
+    <script src="~/Content/bower_components/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <script>
+        var g_selectedNode = null;
+
+        $(document).ready(function () {
+
+            getTree();
+
+            // Active product menu
+            $(".nav-product").addClass("menu-open");
+            $(".nav-product > ul").show();
+        });
+
+        function getTree() {
+            $("#tree").innerHTML = "<span class='text-danger'>Loading...please wait!!!<span>";
+            $.ajax({
+                url: '/Admin/GetCategoryBootstrapTree',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Success == true) {
+                        // alert(JSON.stringify(data.Data));
+                        showTree(data.Data);
+                    }
+                    else {
+                        BootstrapDialog.show({
+                            title: "Lỗi",
+                            message: data.Message,
+                            buttons: [{
+                                label: "Đóng",
+                                cssClass: "btn-primary btn-sm",
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            }]
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    BootstrapDialog.show({
+                        title: "Lỗi",
+                        message: xhr.responseText,
+                        buttons: [{
+                            label: "Đóng",
+                            cssClass: "btn-primary btn-sm",
+                            action: function (dialog) {
+                                dialog.close();
+                            }
+                        }]
+                    });
+                }
+            });
+        }
+
+        function showTree(data) {
+            // Example: initializing the treeview
+            // expanded to 5 levels
+            // with a background color of green
+            // Reference: https://github.com/jonmiles/bootstrap-treeview
+            $('#tree').treeview({
+                data: data,
+                expandIcon: 'fa fa-caret-right',
+                collapseIcon: 'fa fa-caret-down',
+                color: '#3c8dbc',
+                showBorder: false,
+                levels: 1
+            });
+
+            $('#tree').on('nodeSelected', function (event, data) {
+                g_selectedNode = data;
+            });
+        }
+
+        function add() {
+            var parentId = 0;
+            if (g_selectedNode != null) {
+                parentId = g_selectedNode.tags[0];
+            }
+            window.location.href = "/Admin/AddCategory?parentId=" + parentId;
+        }
+
+        function edit() {
+            var nodeId = 0;
+            if (g_selectedNode != null) {
+                nodeId = g_selectedNode.tags[0];
+            }
+            window.location.href = "/Admin/EditCategory?id=" + nodeId;
+        }
+
+        function remove() {
+            if (g_selectedNode != null) {
+                BootstrapDialog.show({
+                    message: '<span class="text-danger">Bạn chắc chắn muốn xóa chức danh <b>' + g_selectedNode.text + '</b>?</span>',
+                    buttons: [{
+                        label: 'Xóa',
+                        cssClass: 'btn-danger btn-sm',
+                        action: function (dialog) {
+                            $.ajax({
+                                url: '/Admin/DeleteCategory?id=' + g_selectedNode.tags[0],
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    if (data.Success == true) {
+                                        getTree();
+                                    }
+                                    else {
+                                        BootstrapDialog.show({
+                                            title: "Lỗi",
+                                            message: data.Message,
+                                            buttons: [{
+                                                label: "Đóng",
+                                                cssClass: "btn-primary btn-sm",
+                                                action: function (dialog) {
+                                                    dialog.close();
+                                                }
+                                            }]
+                                        });
+                                    }
+                                },
+                                error: function (xhr) {
+                                    BootstrapDialog.show({
+                                        title: "Lỗi",
+                                        message: xhr.responseText,
+                                        buttons: [{
+                                            label: "Đóng",
+                                            cssClass: "btn-primary btn-sm",
+                                            action: function (dialog) {
+                                                dialog.close();
+                                            }
+                                        }]
+                                    });
+                                }
+                            });
+                            dialog.close();
+                        }
+                    }, {
+                        label: 'Đóng',
+                        cssClass: 'btn-primary btn-sm',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }]
+                })
+            }
+            else {
+                BootstrapDialog.show({
+                    title: "Lỗi",
+                    message: "Bạn vui lòng chọn danh mục cần xóa!",
+                    buttons: [{
+                        label: "Đóng",
+                        cssClass: "btn-primary btn-sm",
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }]
+                });
+            }
+        }
+
+        function moveUp() {
+            $.ajax({
+                url: '/Admin/MoveCategoryUp?id=' + g_selectedNode.tags[0],
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Success == true) {
+                        getTree();
+                    }
+                    else {
+                        BootstrapDialog.show({
+                            title: "Lỗi",
+                            message: data.Message,
+                            buttons: [{
+                                label: "Đóng",
+                                cssClass: "btn-primary btn-sm",
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            }]
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    BootstrapDialog.show({
+                        title: "Lỗi",
+                        message: xhr.responseText,
+                        buttons: [{
+                            label: "Đóng",
+                            cssClass: "btn-primary btn-sm",
+                            action: function (dialog) {
+                                dialog.close();
+                            }
+                        }]
+                    });
+                }
+            });
+        }
+
+        function moveDown() {
+            $.ajax({
+                url: '/Admin/MoveCategoryDown?id=' + g_selectedNode.tags[0],
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Success == true) {
+                        getTree();
+                    }
+                    else {
+                        BootstrapDialog.show({
+                            title: "Lỗi",
+                            message: data.Message,
+                            buttons: [{
+                                label: "Đóng",
+                                cssClass: "btn-primary btn-sm",
+                                action: function (dialog) {
+                                    dialog.close();
+                                }
+                            }]
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    BootstrapDialog.show({
+                        title: "Lỗi",
+                        message: xhr.responseText,
+                        buttons: [{
+                            label: "Đóng",
+                            cssClass: "btn-primary btn-sm",
+                            action: function (dialog) {
+                                dialog.close();
+                            }
+                        }]
+                    });
+                }
+            });
+        }
+    </script>
+}

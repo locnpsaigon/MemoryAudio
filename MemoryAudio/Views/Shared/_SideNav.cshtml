@@ -1,0 +1,48 @@
+﻿@using MemoryAudio.Models.Home
+@{
+    var statToday = StatisticModel.GetCurrentStatistic();
+    var statYesterday = StatisticModel.GetYesterdayStatistic();
+    var totalVisitors = StatisticModel.GetTotalVisitors();
+
+    // Cheating
+    var cheat_num = 21;
+    statToday.Online += cheat_num;
+    statToday.Visitors += cheat_num;
+    statYesterday.Online += cheat_num;
+    statYesterday.Visitors += cheat_num;
+    totalVisitors += cheat_num + 523;
+}
+<!-- ASIDE NAV -->
+<aside class="s-12 m-4 l-3 xl-2" style="padding-right:0px;">
+    <div class="aside-nav minimize-on-small">
+        <p class="aside-nav-text">Select Category</p>
+        @Html.Raw(MenuModel.GetSideMenuItems())
+    </div>
+    <div class="statistic-info panel panel-info">
+        <div class="panel-heading">Thống kê</div>
+        <div class="panel-body">
+            <div style="display:table;">
+                <div style="display:table-row" ;>
+                    <div style="display:table-cell;"><i class="fa fa-users"></i> Online</div>
+                    <div style="display:table-cell;padding-left:8px;">:</div>
+                    <div style="display:table-cell;padding-left:8px;">@statToday.Online.ToString("#,###")</div>
+                </div>
+                <div style="display:table-row" ;>
+                    <div style="display:table-cell;"><i class="fa fa-users"></i> Hôm nay</div>
+                    <div style="display:table-cell;padding-left:8px;">:</div>
+                    <div style="display:table-cell;padding-left:8px;">@statToday.Visitors.ToString("#,###")</div>
+                </div>
+                <div style="display:table-row" ;>
+                    <div style="display:table-cell;"><i class="fa fa-users"></i> Hôm qua</div>
+                    <div style="display:table-cell;padding-left:8px;">:</div>
+                    <div style="display:table-cell;padding-left:8px;">@statYesterday.Visitors.ToString("#,###")</div>
+                </div>
+                <div style="display:table-row" ;>
+                    <div style="display:table-cell;"><i class="fa fa-users"></i> Tổng số</div>
+                    <div style="display:table-cell;padding-left:8px;">:</div>
+                    <div style="display:table-cell;padding-left:8px;">@totalVisitors.ToString("#,###")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>

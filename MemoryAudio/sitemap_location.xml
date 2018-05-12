@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>http://memoryaudio.ddns.net</loc>
+    <image:image>
+      <image:loc>http://memoryaudio.ddns.net/content/img/tannoy_memory.jpg</image:loc>
+      <image:caption>Memory Audio - Chuyên cung cấp thiết bị audio có nguồn gốc Châu Âu</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Trang-chu</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Gioi-thieu</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Thanh-toan</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/San-pham-moi</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/San-pham-noi-bat</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Home/Khuyen-mai</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Danh-gia</loc>
+  </url>
+  <url>
+    <loc>http://memoryaudio.ddns.net/Lien-he</loc>
+  </url>
+</urlset>

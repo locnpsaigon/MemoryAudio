@@ -1,0 +1,74 @@
+﻿@model MemoryAudio.Models.Admin.EditCategoryModel
+
+@{
+    ViewBag.Title = "Cập nhật danh mục sản phẩm";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Sản phẩm</h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-lg-6" style="padding-left:0px;">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">@ViewBag.Title</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="form-group text-danger">
+                            @Html.ValidationSummary()
+                            @Html.HiddenFor(model => model.CategoryId)
+                        </div>
+                        <div class="form-group">
+                            <label for="ParentId">Danh mục cha</label>
+                            @Html.DropDownListFor(model => model.ParentId, Model.ParentSelecor, "--Danh mục gốc--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="CategoryName">Tên danh mục</label>
+                            @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="Description">Mô tả danh mục</label>
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @type = "password" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="SortIdx">Thứ tự sắp xếp</label>
+                            @Html.EditorFor(model => model.SortIdx, new { htmlAttributes = new { @class = "form-control input-number" } })
+                            @Html.ValidationMessageFor(model => model.SortIdx, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success" style="width:100px;">Cập nhật</button>
+                            <button type="reset" class="btn btn-sm btn-warning" style="width:100px;">Nhập lại</button>
+                            <a href="javascript:window.history.back();" class="btn btn-sm btn-primary" style="width:100px;">Trở về</a>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        }
+        <div class="clearfix"></div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Active system menu
+            $(".nav-product").addClass("menu-open");
+            $(".nav-product > ul").show();
+        });
+    </script>
+}

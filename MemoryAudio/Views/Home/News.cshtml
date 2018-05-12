@@ -1,0 +1,57 @@
+﻿@using MemoryAudio.Libs
+@model MemoryAudio.Models.Home.NewsViewModel
+@{
+    ViewBag.Title = Model.News.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- CONTENT -->
+<section class="s-12 m-12 l-9 xl-10">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div>
+            <nav class="breadcrumb-nav">
+                <ul>
+                    <li><a href="/Trang-chu"><i class="icon-sli-home"></i><span style="margin-left:8px;">Trang chủ</span></a></li>
+                    @if (Model.News.Type == 1)
+                    {
+                    <li><a href="/Danh-gia">Đánh giá</a></li>
+                    }
+                    @if (Model.News.Type == 2)
+                    {
+                    <li><a href="/Khuyen-mai">Khuyến mãi</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <h5 class="news-title">@Html.Raw(@Model.News.Title)</h5>
+        <p class="news-datetime"><i class="glyphicon glyphicon-time"></i> @Model.News.ReleaseDate.ToString("dd/MM/yyyy HH:mm") GMT+7</p>
+        @if (string.IsNullOrWhiteSpace(Model.News.Lead) == false)
+            {
+            <p class="news-lead">@Html.Raw(Model.News.Lead)</p>
+        }
+        <p class="news-body">@Html.Raw(Model.News.Body)</p>
+        @if (Model.RelatedNews.Count > 0)
+        {
+            <div class="news-related">
+                <h5>Các tin cũ hơn</h5>
+                <ul>
+                    @foreach (var news in Model.RelatedNews)
+                    {
+                        if (news.Type == 1)
+                        {
+                            <li>
+                                <a href="/Danh-gia/@news.Title.ToHyperLinkTitle()-@news.NewsId">@Html.Raw(news.Title)</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/Khuyen-mai/@news.Title.ToHyperLinkTitle()-@news.NewsId">@Html.Raw(news.Title)</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</section>

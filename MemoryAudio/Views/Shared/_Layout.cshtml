@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Memory Audio</title>
+    <meta name="description" content="Memory Audio chuyên cung cấp các thiết bị và phụ kiện audio chất lượng cao từ các nhãn hiệu nổi tiếng có nguồn gốc từ Châu Âu...">
+    <meta name="keywords" content="Tannoy,Kef,Chord,Naim,Qed,Van Den Hul,Audio,Tubes,Ampli đèn,Tubes,Sugden,IncaTech,Magnum,cambridge audio,rega,arcam,audiolab,cyrus,tụ,trở...">
+    <!-- META FOR FACEBOOK -->
+    <meta content="Memory Audio" property="og:site_name" />
+    <meta property="og:url" itemprop="url" content="http://memoryaudio.ddns.net" />
+    <meta property="og:image" itemprop="thumbnailUrl" content="http://memoryaudio.ddns.net/content/img/tannoy_memory.jpg" />
+    <meta content="Memory Audio - Chuyên cung cấp thiết bị audio Châu Âu mới hoặc đã qua sử dụng" itemprop="headline" property="og:title" />
+    <meta content="Loa, ampli, dây tín hiệu, dây loa, dây digital, đầu CD, cơ, DA, bóng đèn, Tannoy, Mullard, Chord, Naim, Kef, Cardas, Shunyata,Acoutic Zen..." itemprop="description" property="og:description" />
+    <!-- END META FOR FACEBOOK -->
+    <meta name="copyright" content="MemoryAudio" />
+    <meta name="author" content="MemoryAudio" />
+    <meta name="robots" content="index,follow" />
+    <link rel="alternate" href="http://memoryaudio.ddns.net/" hreflang="x-default" />
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css-web")
+    @RenderSection("styles", required: false)
+    <!-- CUSTOM STYLE -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+</head>
+<body class="size-1520">
+    <!-- HEADER -->
+    <header>
+        <div class="line">
+            <div class="box" style="background:url('/Content/img/bg_5.jpg')">
+                <div class="s-12 l-6">
+                    <img src="~/content/img/tannoy_memory.jpg" class="img-logo">
+                    <div class="top-address">
+                        <h5 class="text-info">MEMORY AUDIO</h5>
+                        <p>377/24B CMT8, P.12, Q.10, HCM</p>
+                        <p>Phone: 0914.38.02.38 - 0908.318.708</p>
+                    </div>
+                </div>
+                <div class="s-12 l-6 right">
+                    <div class="margin">
+                        @Html.Partial("_SearchBar")
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_TopNav")
+    </header>
+
+    <!-- ASIDE NAV AND CONTENT -->
+    <div class="line">
+        <div class="box margin-bottom">
+            <div class="margin2x">
+            @Html.Partial("_SideNav")
+            @RenderBody()            
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <footer>
+        <div class="line">
+            <div class="s-12 l-6">
+                <p>Copyright 2018, Memory Audio</p>
+            </div>
+            <div class="s-12 l-6">
+                @*<p class="right">Copyright 2018, Memory Audio</p>*@
+            </div>
+        </div>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

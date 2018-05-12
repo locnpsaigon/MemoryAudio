@@ -1,0 +1,42 @@
+﻿@using PagedList.Mvc
+@using MemoryAudio.Libs
+@model MemoryAudio.Models.Home.NewsListViewModel
+@{
+    ViewBag.Title = "Khuyến mãi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- CONTENT -->
+<section class="s-12 m-12 l-9 xl-10">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div>
+            <nav class="breadcrumb-nav">
+                <ul>
+                    <li><a href="/Trang-chu"><i class="icon-sli-home"></i><span style="margin-left:8px;">Trang chủ</span></a></li>
+                    <li><span class="text-danger">Tin khuyến mãi</span></li>
+                </ul>
+            </nav>
+        </div>
+        @foreach (var news in Model.News)
+        {
+            <div class="list-news">
+                <h3 class="news-title"><a href="/Khuyen-mai/@news.Title.ToHyperLinkTitle()-@news.NewsId">@Html.Raw(news.Title)</a></h3>
+                <p class="news-datetime"><i class="glyphicon glyphicon-time"></i> @news.ReleaseDate.ToString("dd/MM/yyyy HH:mm") GMT+7</p>
+                <div class="news-thumb-art"><a href="/Khuyen-mai/@news.Title.ToHyperLinkTitle()-@news.NewsId"><img src="@news.Icon" /></a></div>
+                <p class="news-lead">@Html.Raw(news.Lead)</p>
+            </div>
+        }
+        @if (Model.News.Count == 0)
+        {
+            <div class="list-news text-danger">Không có thông tin khuyến mãi nào!</div>
+        }
+        @if (Model.News.PageCount > 1)
+        {
+            <!--Paging-->
+            <div class="pull-right">
+                @Html.PagedListPager(Model.News, page => Url.Action("Promotion", new { page, pageSize = Model.PageSize }))
+            </div>
+        }
+    </div>
+</section>

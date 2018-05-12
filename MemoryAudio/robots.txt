@@ -1,0 +1,6 @@
+User-agent: *
+Sitemap: http://memoryaudio.ddns.net/sitemap_location.xml
+Disallow: /App_Data/
+Disallow: /bin/
+Disallow: /Admin/
+Disallow: /Views/

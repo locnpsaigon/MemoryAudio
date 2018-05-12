@@ -1,0 +1,274 @@
+﻿@model MemoryAudio.Models.Admin.AddNewsModel
+
+@{
+    ViewBag.Title = "Bài viết mới";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">@ViewBag.Title</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group text-danger">
+                                @Html.ValidationSummary()
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-4">
+                                    <label for="Type">Chuyên mục</label>
+                                    @Html.DropDownListFor(model => model.Type, Model.TypeSelector, "--Chuyên mục--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="Status">Trạng thái</label>
+                                    @Html.DropDownListFor(model => model.Status, Model.StatusSelector, "--Trạng thái--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label for="ReleaseDate">Ngày phát hành</label>
+                                    <div class="input-group date" data-provide="datepicker">
+                                        @Html.EditorFor(model => model.ReleaseDate, new { htmlAttributes = new { @class = "form-control" } })
+                                        <span class="input-group-addon">
+                                            <i class="glyphicon glyphicon-th"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.ReleaseDate, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label for="Title">Tiêu đề</label>
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label for="Lead">Lời dẫn</label>
+                                    @Html.TextAreaFor(model => model.Lead, new { @class = "form-control", @rows = "6" })
+                                    @Html.ValidationMessageFor(model => model.Lead, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label for="Icon">Ảnh đại diện</label>
+                                    @Html.EditorFor(model => model.Icon, new { htmlAttributes = new { @class = "form-control" } })
+                                    <img class="icon-img" src="@(String.IsNullOrWhiteSpace(Model.Icon) ? "/Content/img/no-image.png" : Model.Icon)" />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label for="Body">Nội dung</label>
+                                    @Html.TextAreaFor(model => model.Body, new { @class = "form-control", @type = "password" })
+                                    @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label for="Tags">Tags</label>
+                                    @Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+                                </div>
+
+
+                                <div class="form-group col-lg-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-success" style="width:100px;">Lưu bài viết</button>
+                                        <button type="reset" class="btn btn-sm btn-warning" style="width:100px;">Nhập lại</button>
+                                        <a href="javascript:window.history.back();" class="btn btn-sm btn-primary" style="width:100px;">Trở về</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div>
+
+        <!-- The Modal -->
+        <div id="modal" class="modal">
+
+            <!-- The Close Button -->
+            <span id="spanClose" class="close">&times;</span>
+
+            <!-- Modal Content (The Image) -->
+            <img id="imgContent" class="modal-content">
+
+            <!-- Modal Caption (Image Text) -->
+            <div id="caption"></div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+@section styles {
+    <link href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <style>
+        .icon-img {
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+            max-height: 128px;
+        }
+
+            .icon-img:hover {
+                opacity: 0.7;
+            }
+
+            /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+
+        /* Modal Content (image) */
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        /* Caption of Modal Image */
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        /* Add Animation */
+        .modal-content, #caption {
+            -webkit-animation-name: zoom;
+            -webkit-animation-duration: 0.6s;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @@-webkit-keyframes zoom {
+            from {
+                -webkit-transform: scale(0);
+            }
+
+            to {
+                -webkit-transform: scale(1);
+            }
+        }
+
+        @@keyframes zoom {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        /* 100% Image Width on Smaller Screens */
+        @@media only screen and (max-width: 700px) {
+            .modal-content {
+                width: 100%;
+            }
+        }
+
+
+        /* The Close Button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+}
+@section scripts {
+    <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/bower_components/ckeditor/ckeditor.js"></script>
+    <script>
+        var modal = $("#modal");
+        var imgContent = $("#imgContent");
+        var spanClose = $("#spanClose");
+        var caption = $("#caption");
+
+        $(document).ready(function () {
+            // DatePicker
+            $('.input-group.date').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayBtn: true,
+                todayHighlight:true
+            });
+
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('Body')
+
+            // View image
+            $(".icon-img").on("click", function () {
+                $(modal).show();
+                $(imgContent).attr("src", $(this).attr("src"));
+            })
+
+            $("#Icon").on("change", function () {
+                var img_src = $(this).val().trim();
+                if (img_src != '') {
+                    $(".icon-img").attr("src", img_src);
+                } else {
+                    $(".icon-img").attr("src", "/Content/img/no-image.png");
+                }
+            })
+
+            // When the user clicks on <span> (x), close the modal
+            spanClose.on("click", function () {
+                modal.hide();
+            })
+
+            // Active system menu
+            $(".nav-news").addClass("menu-open");
+            $(".nav-news > ul").show();
+        });
+    </script>
+}

@@ -1,0 +1,85 @@
+﻿@using MemoryAudio.Libs
+@model MemoryAudio.Models.Home.HomeViewModel
+@{
+    ViewBag.Title = "Trang chủ";
+}
+<!-- CONTENT -->
+<section class="s-12 m-12 l-9 xl-10">
+    <!-- CAROUSEL -->
+    <div class="line hide-s">
+        <div id="header-carousel" class="owl-carousel owl-theme">
+            <div class="item"><img src="~/content/img/banner_1.jpg" alt=""></div>
+            <div class="item"><img src="~/content/img/banner_2.jpg" alt=""></div>
+            <div class="item"><img src="~/content/img/banner_3.jpg" alt=""></div>
+            <div class="item"><img src="~/content/img/banner_4.jpg" alt=""></div>
+            <div class="item"><img src="~/content/img/banner_5.jpg" alt=""></div>
+        </div>
+    </div>
+    <!--NEW PRODUCTS-->
+    <h1 class="text-danger">Sản phẩm mới</h1>
+    <div class="margin2x">
+        @foreach (var item in Model.NewProducts)
+        {
+            <div class="s-12 m-12 l-4 xl-3 xxl-3 product-item">
+                <a href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId"><img class="thumb-img" src="@item.Image1"></a>
+                <div style="min-height:36px;"><a href="/Home/Product?productId=@item.ProductId"><h6><strong>@item.ProductName</strong></h6></a></div>
+                <h6>Giá: <span class="text-danger"><strong>@item.Price.ToString("#,###")Đ</strong></span></h6>
+                @*<a class="btn btn-info btn-details" href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId">Xem chi tiết</a>*@
+            </div>
+        }
+    </div>
+    @if (Model.NewProducts.Count == AppSettings.PAGE_SIZE)
+    {
+        <div class="text-right">
+            <a href="/San-pham-moi" class="btn btn-danger"><i class="glyphicon glyphicon-th"></i> XEM TẤT CẢ</a>
+        </div>
+    }
+    <!--HOT PRODUCTS-->
+    <h1 class="text-danger">Sản phẩm nổi bật</h1>
+    <div class="margin2x">
+        @foreach (var item in Model.HotProducts)
+        {
+            <div class="s-12 m-12 l-4 xl-3 xxl-3 product-item">
+                <a href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId"><img class="thumb-img" src="@item.Image1"></a>
+                <div style="min-height:36px;"><a href="/Home/Product?productId=@item.ProductId"><h6><strong>@item.ProductName</strong></h6></a></div>
+                <h6>Giá: <span class="text-bold text-danger">@item.Price.ToString("#,###")Đ</span></h6>
+                @*<a class="btn btn-info btn-details" href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId">Xem chi tiết</a>*@
+            </div>
+        }
+    </div>
+    @if (Model.NewProducts.Count == AppSettings.PAGE_SIZE)
+    {
+        <div class="text-right">
+            <a href="/San-pham-noi-bat" class="btn btn-danger"><i class="glyphicon glyphicon-th"></i> XEM TẤT CẢ</a>
+        </div>
+    }
+</section>
+
+@section styles {
+    <link rel="stylesheet" href="~/content/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="~/content/owl-carousel/owl.theme.css">
+    <style>
+        h1 {
+            font-size: 1.5rem;
+            margin: 18px 0px;
+        }
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/content/owl-carousel/owl.carousel.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            var owl = $('#header-carousel');
+            owl.owlCarousel({
+                nav: false,
+                dots: true,
+                items: 1,
+                loop: true,
+                navText: ["&#xf007", "&#xf006"],
+                autoplay: true,
+                autoplayTimeout: 3000
+            });
+        })
+    </script>
+}

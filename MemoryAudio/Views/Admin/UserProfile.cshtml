@@ -1,0 +1,102 @@
+﻿@model MemoryAudio.Models.Admin.UserProfileModel
+
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            @ViewBag.Title
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="col-md-6" style="padding-left:0px;">
+            <div class="box box-primary">
+                @*<div class="box-header with-border">
+                        <h3 class="box-title">@ViewBag.Title</h3>
+                    </div>*@
+                <!-- /.box-header -->
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <table class="table no-border">
+                            <tbody>
+                                <tr>
+                                    <td>Họ tên</td>
+                                    <td>:</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Số điện thoại</td>
+                                    <td>:</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>:</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Chức danh</td>
+                                    <td>:</td>
+                                    <td>
+                                        @if (Model.Roles.Count > 0)
+                                        {
+                                            @String.Join(", ", Model.Roles.ToArray());
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning">Chưa có chức danh nào</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày tham gia</td>
+                                    <td>:</td>
+                                    <td>@Model.CreationDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <input type="submit" class="btn btn-sm btn-success" style="width:100px;" value="Cập nhật" />
+                                        <a href="/Admin/ChangePassword" class="btn btn-sm btn-warning" style="width:100px;">Đổi mật khẩu</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="clearfix"></div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Active system menu
+            $(".nav-system").addClass("menu-open");
+            $(".nav-system > ul").show();
+        });
+    </script>
+}

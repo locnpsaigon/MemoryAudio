@@ -1,0 +1,228 @@
+﻿@using PagedList.Mvc
+@model MemoryAudio.Models.Admin.UserListViewModel
+@{
+    ViewBag.Title = "Tra cứu tài khoản";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@Html.Hidden("pageIndex", Model.PageIndex)
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Hệ thống</h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">@ViewBag.Title</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="container-fluid">
+                            <div class="row" style="margin-bottom:8px;">
+                                <div class="col-md-6" style="padding-left:0px;">
+                                    <div class="form-inline text-left">
+                                        <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" style="width:165px;" />
+                                        <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
+                                        <a href="/Admin/AddUser" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="padding-right:0px;">
+                                    <div class="form-inline text-right">
+                                        Trạng thái:
+                                        <select id="selectStatus" class="form-control input-sm">
+                                            <option value="0" @(Model.Status == 0 ? "selected" : "")>--Tất cả--</option>
+                                            <option value="1" @(Model.Status == 1 ? "selected" : "")>Đang khóa</option>
+                                            <option value="2" @(Model.Status == 2 ? "selected" : "")>Đang hoạt động</option>
+                                        </select>
+                                        Phân trang:
+                                        <select id="selectPageSize" class="form-control input-sm">
+                                            <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                                            <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                                            <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                                            <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped" style="margin-bottom:8px;">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tài khoản</th>
+                                    <th>Họ tên</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var rowIndex = Model.Users.FirstItemOnPage;
+                                    foreach (var item in Model.Users)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@rowIndex</td>
+                                            <td><a href="/Admin/EditUser?id=@item.UserId">@item.Username</a></td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.Phone</td>
+                                            <td>@item.Email</td>
+                                            <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                @if (item.Status == 1)
+                                                {
+                                                    <span class="text-danger">Đang khóa</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-success">Đang hoạt động</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="/Admin/EditUser?id=@item.UserId" class="btn btn-xs btn-info">Edit</a>
+                                                <a href="javascript:deleteUser(@item.UserId, '@item.Username')" class="btn btn-xs btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                        rowIndex++;
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tài khoản</th>
+                                    <th>Họ tên</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <!--Summay-->
+                        @if (Model.Users.TotalItemCount > 0)
+                        {
+                            <div class="container-fluid" style="margin:8px 0px;">
+                                <div class="row">
+                                    Hiển thị @Model.Users.FirstItemOnPage đến @Model.Users.LastItemOnPage trên tổng @Model.Users.TotalItemCount tài khoản
+                                </div>
+                            </div>
+                        }
+
+                        <!--Paging-->
+                        @if (Model.Users.PageCount > 1)
+                        {
+                            <div class="container-fluid" style="margin:8px 0px;">
+                                <div class="row">
+                                    @Html.PagedListPager(Model.Users, page => Url.Action("Users", new { page, pageSize = Model.PageSize, status = Model.Status, filterText = Model.FilterText }))
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section Styles {
+    <link href="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#selectPageSize").on("change", function () {
+                search();
+            });
+            $("#selectStatus").on("change", function () {
+                search();
+            });
+            $("#buttonSearch").on("click", function () {
+                $("#pageIndex").val(1);
+                search();
+            });
+            // Active system menu
+            $(".nav-system").addClass("menu-open");
+            $(".nav-system > ul").show();
+        });
+
+        function search() {
+            var filterText = $("#inputSearch").val();
+            var status = $("#selectStatus").val();
+            var pageIndex = $("#pageIndex").val();
+            var pageSize = $("#selectPageSize").val();
+            var url = "/Admin/Users?filterText=" + filterText + "&status=" + status + "&page=" + pageIndex + "&pageSize=" + pageSize;
+            window.location.replace(url);
+        }
+
+        function deleteUser(id, username) {
+            BootstrapDialog.show({
+                message: '<span class="text-danger">Bạn chắc chắn muốn xóa tài khoản <b>' + username + '</b>?</span>',
+                buttons: [{
+                    label: 'Xóa',
+                    cssClass: 'btn-danger btn-sm',
+                    action: function (dialog) {
+                        $.ajax({
+                            url: '/Admin/DeleteUser?id=' + id,
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (data) {
+                                if (data.Success == true) {
+                                    search();
+                                }
+                                else {
+                                    BootstrapDialog.show({
+                                        title: "Lỗi",
+                                        message: data.Message,
+                                        buttons: [{
+                                            label: "Đóng",
+                                            cssClass: "btn-primary btn-sm",
+                                            action: function (dialog) {
+                                                dialog.close();
+                                            }
+                                        }]
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                BootstrapDialog.show({
+                                    title: "Lỗi",
+                                    message: xhr.responseText,
+                                    buttons: [{
+                                        label: "Đóng",
+                                        cssClass: "btn-primary btn-sm",
+                                        action: function (dialog) {
+                                            dialog.close();
+                                        }
+                                    }]
+                                });
+                            }
+                        });
+                        dialog.close();
+                    }
+                }, {
+                    label: 'Đóng',
+                    cssClass: 'btn-primary btn-sm',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            })
+        }
+    </script>
+}

@@ -1,0 +1,198 @@
+﻿@using PagedList.Mvc
+@model MemoryAudio.Models.Admin.BrandListViewModel
+
+@{
+    ViewBag.Title = "Tra cứu thương hiệu sản phẩm";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@Html.Hidden("pageIndex", Model.PageIndex)
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Sản phẩm</h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">@ViewBag.Title</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="container-fluid">
+                            <div class="row" style="margin-bottom:8px;">
+                                <div class="col-md-8" style="padding-left:0px;">
+                                    <div class="form-inline text-left">
+                                        <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" style="width:225px;" />
+                                        <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
+                                        <a href="/Admin/AddBrand" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="padding-right:0px;">
+                                    <div class="form-inline text-right">
+                                        Phân trang:
+                                        <select id="selectPageSize" class="form-control input-sm">
+                                            <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                                            <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                                            <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                                            <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped" style="margin-bottom:8px;">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên thương hiệu</th>
+                                    <th>Mô tả</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var rowIndex = Model.Brands.FirstItemOnPage;
+                                    foreach (var item in Model.Brands)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@rowIndex</td>
+                                            <td><a href="/Admin/EditBrand?id=@item.BrandId">@item.BrandName</a></td>
+                                            <td>@item.Description</td>
+                                            <td>
+                                                <a href="/Admin/EditBrand?id=@item.BrandId" class="btn btn-xs btn-info">Edit</a>
+                                                <a href="javascript:deleteBrand(@item.BrandId, '@item.BrandName')" class="btn btn-xs btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                        rowIndex++;
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên thương hiệu</th>
+                                    <th>Mô tả</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <!--Summay-->
+                        @if (Model.Brands.TotalItemCount > 0)
+                        {
+                            <div class="container-fluid" style="margin:8px 0px;">
+                                <div class="row">
+                                    Hiển thị @Model.Brands.FirstItemOnPage đến @Model.Brands.LastItemOnPage trên tổng @Model.Brands.TotalItemCount thương hiệu
+                                </div>
+                            </div>
+                        }
+
+                        <!--Paging-->
+                        @if (Model.Brands.PageCount > 1)
+                        {
+                            <div class="container-fluid" style="margin:8px 0px;">
+                                <div class="row">
+                                    @Html.PagedListPager(Model.Brands, page => Url.Action("Brands", new { page, pageSize = Model.PageSize, filterText = Model.FilterText }))
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@section Styles {
+    <link href="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="~/Content/bower_components/bootstrap-dialog/bootstrap-dialog.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#selectPageSize").on("change", function () {
+                search();
+            });
+            $("#buttonSearch").on("click", function () {
+                $("#pageIndex").val(1);
+                search();
+            });
+            // Active system menu
+            $(".nav-product").addClass("menu-open");
+            $(".nav-product > ul").show();
+        });
+
+        function search() {
+            var filterText = $("#inputSearch").val();
+            var pageIndex = $("#pageIndex").val();
+            var pageSize = $("#selectPageSize").val();
+            var url = "/Admin/Brands?filterText=" + filterText + "&page=" + pageIndex + "&pageSize=" + pageSize;
+            window.location.replace(url);
+        }
+
+        function deleteBrand(id, brandname) {
+            BootstrapDialog.show({
+                message: '<span class="text-danger">Bạn chắc chắn muốn xóa thương hiệu sản phẩm <b>' + brandname + '</b>?</span>',
+                buttons: [{
+                    label: 'Xóa',
+                    cssClass: 'btn-danger btn-sm',
+                    action: function (dialog) {
+                        $.ajax({
+                            url: '/Admin/DeleteBrand?id=' + id,
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (data) {
+                                if (data.Success == true) {
+                                    search();
+                                }
+                                else {
+                                    BootstrapDialog.show({
+                                        title: "Lỗi",
+                                        message: data.Message,
+                                        buttons: [{
+                                            label: "Đóng",
+                                            cssClass: "btn-primary btn-sm",
+                                            action: function (dialog) {
+                                                dialog.close();
+                                            }
+                                        }]
+                                    });
+                                }
+                            },
+                            error: function (xhr) {
+                                BootstrapDialog.show({
+                                    title: "Lỗi",
+                                    message: xhr.responseText,
+                                    buttons: [{
+                                        label: "Đóng",
+                                        cssClass: "btn-primary btn-sm",
+                                        action: function (dialog) {
+                                            dialog.close();
+                                        }
+                                    }]
+                                });
+                            }
+                        });
+                        dialog.close();
+                    }
+                }, {
+                    label: 'Đóng',
+                    cssClass: 'btn-primary btn-sm',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            })
+        }
+    </script>
+}

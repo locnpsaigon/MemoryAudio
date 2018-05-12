@@ -1,0 +1,116 @@
+﻿@using PagedList.Mvc
+@using MemoryAudio.Libs
+@model MemoryAudio.Models.Home.HotProductsViewModel
+@{
+    ViewBag.Title = "Sản phẩm nổi bật";
+}
+
+<!-- CONTENT -->
+<section class="s-12 m-12 l-9 xl-10">
+
+    <!--CATEGORY RESULTS-->
+    <div class="container">
+        <div>
+            <nav class="breadcrumb-nav">
+                <ul>
+                    <li><a href="/Trang-chu"><i class="icon-sli-home"></i><span style="margin-left:8px;">Trang chủ</span></a></li>
+                    <li><span class="text-danger">@ViewBag.Title (@Model.Products.TotalItemCount)</span></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Display settings -->
+        <div class="row">
+            <div class="col-md-4 col-lg-6">
+                <label>Từ khóa tra cứu</label>
+                <div class="container" style="padding-left:0px; padding-right:0px;">
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <input id="inputFilterText" class="form-control" value="@Model.FilterText" placeholder="Từ khóa tra cứu" />
+                        </div>
+                        <div class="col-xs-3" style="padding-left:0px;">
+                            <input id="btnFilter" type="button" class="btn btn-info" value="Tra cứu" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <label>Kích thước trang:</label>
+                <select id="selectPageSize" class="form-control">
+                    <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                    <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                    <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                    <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                </select>
+            </div>
+            <div class="col-md-5 col-lg-4">
+                <label>Sắp xếp:</label>
+                <select id="selectSortOrder" class="form-control">
+                    <option value="" @(string.IsNullOrWhiteSpace(Model.SortOrder) ? "selected" : "")>Mặc định</option>
+                    <option value="price" @(Model.SortOrder.Equals("price") ? "selected" : "")>Giá tiền: tăng dần</option>
+                    <option value="price_desc" @(Model.SortOrder.Equals("price_desc") ? "selected" : "")>Giá tiền: giảm dần</option>
+                    <option value="name" @(Model.SortOrder.Equals("name") ? "selected" : "")>Tên sản phẩm: A - Z</option>
+                    <option value="name_desc" @(Model.SortOrder.Equals("name_desc") ? "selected" : "")>Tên sản phẩm: Z - A</option>
+                </select>
+            </div>
+        </div>
+        <!-- Pruducts -->
+        @if (Model.Products.Count > 0)
+        {
+            <div class="margin2x" style="margin-top:24px;">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="s-12 m-12 l-4 xl-3 xxl-3 product-item">
+                        <a href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId"><img class="thumb-img" src="@item.Image1"></a>
+                        <div style="min-height:36px;"><a href="/Home/Product?productId=@item.ProductId"><h6><strong>@item.ProductName</strong></h6></a></div>
+                        <h6>Giá: <span class="text-danger"><strong>@item.Price.ToString("#,###")Đ</strong></span></h6>
+                        @*<a class="btn btn-info btn-details" href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId">Xem chi tiết</a>*@
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-danger">Không có sản phẩm nào!</p>
+                </div>
+            </div>
+        }
+        <!--Paging-->
+        @if (Model.Products.PageCount > 1)
+        {
+            @Html.PagedListPager(Model.Products, page => Url.Action("NewProducts", new { page, pageSize = Model.PageSize, sortOrder = Model.SortOrder, filterText = Model.FilterText }))
+        }
+    </div>
+
+</section>
+
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+            $("#selectPageSize").on("change", function () {
+                search();
+            });
+            $("#selectSortOrder").on("change", function () {
+                search();
+            });
+            $("#btnFilter").on("click", function () {
+                search();
+            });
+        });
+
+        function search() {
+            var filterText = $("#inputFilterText").val();
+            var categoryId = $("#CategoryId").val();
+            var pageIndex = $("#PageIndex").val();
+            var pageSize = $("#selectPageSize").val();
+            var sortOrder = $("#selectSortOrder").val();
+
+            var url = "/Home/HotProducts?filterText=" + filterText + "&categoryId=" + categoryId + "&sortOrder=" + sortOrder + "&page=" + pageIndex + "&pageSize=" + pageSize;
+            window.location.replace(url);
+        }
+
+    </script>
+
+}
