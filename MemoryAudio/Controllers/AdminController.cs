@@ -28,6 +28,7 @@ namespace MemoryAudio.Controllers
         }
 
         #region Authentication
+        [SSLFilter]
         public ActionResult SignIn()
         {
             var model = new SignInModel();
@@ -38,6 +39,7 @@ namespace MemoryAudio.Controllers
         }
 
         [HttpPost]
+        [SSLFilter]
         public ActionResult SignIn(SignInModel model)
         {
             try

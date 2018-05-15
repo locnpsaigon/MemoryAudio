@@ -204,6 +204,7 @@
     <Compile Include="Models\Security\AdminAuthorizeAttribute.cs" />
     <Compile Include="Models\Security\AuthUserData.cs" />
     <Compile Include="Models\Security\MAPrinciple.cs" />
+    <Compile Include="Models\Security\SSLFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
