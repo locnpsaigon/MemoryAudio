@@ -54,25 +54,36 @@
             <div class="card mt-4">
                 <div class="card-body">
                     <h5>@product.ProductName</h5>
-                    @if (product.Discount <= 0)
+                    @if (product.Price > 0)
                     {
-                        <p>
-                            <span>Giá:</span>
-                            <span class="text-danger"><strong>@product.Price.ToString("#,###")Đ</strong></span>
-                        </p>
+                        if (product.Discount <= 0)
+                        {
+                            <p>
+                                <span>Giá:</span>
+                                <span class="text-danger"><strong>@product.Price.ToString("#,###")Đ</strong></span>
+                            </p>
+                        }
+                        else
+                        {
+                            var finalPrice = product.Price - product.Discount;
+                            var discountPercent = (product.Discount / product.Price) * 100;
+                            if (finalPrice < 0) { finalPrice = 0; }
+                            if (discountPercent < 0) { discountPercent = 0; }
+                            <p>
+                                <span>Giá:</span>
+                                <span class="text-danger"><strong>@finalPrice.ToString("#,###")Đ</strong></span>
+                                <span style="text-decoration:line-through;color:grey;">@product.Price.ToString("#,###")Đ</span>
+                                <span><strong>-@discountPercent.ToString("#,###")%</strong></span>
+                            </p>
+                        }
                     }
                     else
                     {
-                        var finalPrice = product.Price - product.Discount;
-                        var discountPercent = (product.Discount / product.Price) * 100;
                         <p>
                             <span>Giá:</span>
-                            <span class="text-danger"><strong>@finalPrice.ToString("#,###")Đ</strong></span>
-                            <span style="text-decoration:line-through;color:grey;">@product.Price.ToString("#,###")Đ</span>
-                            <span><strong>-@discountPercent.ToString("#,###")%</strong></span>
+                            <span class="text-danger"><strong>Liên hệ</strong></span>
                         </p>
                     }
-
                     <p>Thương hiệu: @product.BrandName</p>
                     <span class="text-warning">★ ★ ★ ★ ☆</span> 4.0 stars
                     <p class="text-danger">@Html.Raw(product.Specification)</p>

@@ -68,22 +68,33 @@
             <div class="margin2x" style="margin-top:24px;">
                 @foreach (var item in Model.Products)
                 {
+
                     <div class="s-12 m-12 l-4 xl-3 xxl-3 product-item">
                         <a href="/San-pham/@item.ProductName.ToHyperLinkTitle()-@item.ProductId"><img class="thumb-img" src="@item.Image1"></a>
                         <div style="min-height:36px;"><a href="/Home/Product?productId=@item.ProductId"><h6><strong>@item.ProductName</strong></h6></a></div>
-                        @if (item.Discount <= 0)
+                        @if (item.Price > 0)
                         {
-                            <span>Giá:</span> 
-                            <span class="text-danger"><strong>@item.Price.ToString("#,###")Đ</strong></span>
+                            if (item.Discount <= 0)
+                            {
+                                <span>Giá:</span>
+                                <span class="text-danger"><strong>@item.Price.ToString("#,###")Đ</strong></span>
+                            }
+                            else
+                            {
+                                var finalPrice = item.Price - item.Discount;
+                                var discountPercent = (item.Discount / item.Price) * 100;
+                                if (finalPrice < 0) { finalPrice = 0; }
+                                if (discountPercent < 0) { discountPercent = 0; }
+                                <span>Giá:</span>
+                                <span class="text-danger"><strong>@finalPrice.ToString("#,###")Đ</strong></span>
+                                <span style="text-decoration:line-through;color:grey;">@item.Price.ToString("#,###")Đ</span>
+                                <span><strong>-@discountPercent.ToString("#,###")%</strong></span>
+                            }
                         }
                         else
                         {
-                            var finalPrice = item.Price - item.Discount;
-                            var discountPercent = (item.Discount / item.Price) * 100;
-                            <span>Giá:</span> 
-                            <span class="text-danger"><strong>@finalPrice.ToString("#,###")Đ</strong></span> 
-                            <span style="text-decoration:line-through;color:grey;">@item.Price.ToString("#,###")Đ</span> 
-                            <span><strong>-@discountPercent.ToString("#,###")%</strong></span> 
+                            <span>Giá:</span>
+                            <span class="text-danger"><strong>Liên hệ</strong></span>
                         }
                     </div>
                 }
