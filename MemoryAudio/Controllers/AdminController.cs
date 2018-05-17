@@ -1492,6 +1492,10 @@ namespace MemoryAudio.Controllers
             {
                 using (var db = new DBContext())
                 {
+                    model.Price = "0";
+                    model.Discount = "0";
+                    model.Display = 1;
+
                     // Generate category selector
                     var categoryNodes = CategoryTree.GetCategoryTree().ToList();
                     model.CategorySelector = categoryNodes
