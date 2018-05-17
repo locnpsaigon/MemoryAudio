@@ -1494,6 +1494,7 @@ namespace MemoryAudio.Controllers
                 {
                     model.Price = "0";
                     model.Discount = "0";
+                    model.TotalInStock = "1";
                     model.Display = 1;
 
                     // Generate category selector
