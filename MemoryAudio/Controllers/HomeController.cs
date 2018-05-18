@@ -396,6 +396,7 @@ namespace MemoryAudio.Controllers
                                            TotalInStock = p.TotalInStock,
                                            Price = p.Price,
                                            Discount = p.Discount,
+                                           MSRP = p.MSRP,
                                            Image1 = p.Image1,
                                            Image2 = p.Image2,
                                            Image3 = p.Image3,

@@ -18,6 +18,7 @@ namespace MemoryAudio.Models.Entities
         public int TotalInStock { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
+        public decimal MSRP { get; set; }
         public string Image1 { get; set; }
         public string Image2 { get; set; }
         public string Image3 { get; set; }
@@ -39,6 +40,7 @@ namespace MemoryAudio.Models.Entities
             TotalInStock = 0;
             Price = 0;
             Discount = 0;
+            MSRP = 0;
             CategoryId = 0;
             Image1 = "";
             Image2 = "";

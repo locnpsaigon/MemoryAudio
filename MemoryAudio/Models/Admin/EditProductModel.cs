@@ -33,6 +33,9 @@ namespace MemoryAudio.Models.Admin
         [Required(ErrorMessage = "Vui lòng nhập giảm giá")]
         public string Discount { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng nhập giá niêm yết")]
+        public string MSRP { get; set; }
+
         public string Image1 { get; set; }
         public string Image2 { get; set; }
         public string Image3 { get; set; }

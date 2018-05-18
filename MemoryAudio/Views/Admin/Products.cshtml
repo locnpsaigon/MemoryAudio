@@ -62,8 +62,10 @@
                                     <th>Tên sản phẩm</th>
                                     <th>Loại sản phẩm</th>
                                     <th>Nhãn hiệu</th>
-                                    <th>Giá bán</th>
+                                    <th>Giá</th>
                                     <th>Giảm giá</th>
+                                    <th>Giảm bán</th>
+                                    <th>Giá sách</th>
                                     <th>Số tồn</th>
                                     <th>Hiển thị</th>
                                     <th>Sắp xếp</th>
@@ -75,16 +77,19 @@
                                     var rowIndex = Model.Products.FirstItemOnPage;
                                     foreach (var item in Model.Products)
                                     {
+                                        var finalPrice = item.Price - item.Discount;
+                                        if (finalPrice < 0) { finalPrice = 0; }
                                         <tr>
                                             <td class="text-center">@rowIndex</td>
                                             <td><a href="/Admin/EditProduct?id=@item.ProductId">@item.ProductName</a></td>
-                                            <td>@item.CategoryName</td>
-                                            <td>@item.BrandName</td>
-                                            <td class="text-right">@item.Price.ToString("#,###")</td>
-                                            <td class="text-right">@item.Discount.ToString("#,###")</td>
-                                            <td class="text-right">@item.TotalInStock.ToString("#,###")</td>
-
-                                            <td class="text-center">
+                                            <td class="text-nowrap">@item.CategoryName</td>
+                                            <td class="text-nowrap">@item.BrandName</td>
+                                            <td class="text-right ">@item.Price.ToString("#,##0")</td>
+                                            <td class="text-right">@item.Discount.ToString("#,##0")</td>
+                                            <td class="text-right text-danger">@finalPrice.ToString("#,##0")</td>
+                                            <td class="text-right">@item.MSRP.ToString("#,##0")</td>
+                                            <td class="text-right">@item.TotalInStock.ToString("#,##0")</td>
+                                            <td class="text-center text-nowrap">
                                                 @switch (item.Display)
                                                 {
                                                     case 1:
@@ -105,7 +110,7 @@
                                                 }
                                             </td>
                                             <td class="text-center">@item.SortIdx</td>
-                                            <td>
+                                            <td class="text-nowrap">
                                                 <a href="/Admin/EditProduct?id=@item.ProductId" class="btn btn-xs btn-info">Edit</a>
                                                 <a href="javascript:deleteProduct(@item.ProductId, '@item.ProductName')" class="btn btn-xs btn-danger">Delete</a>
                                             </td>
@@ -120,8 +125,10 @@
                                     <th>Tên sản phẩm</th>
                                     <th>Loại sản phẩm</th>
                                     <th>Nhãn hiệu</th>
-                                    <th>Giá bán</th>
+                                    <th>Giá</th>
                                     <th>Giảm giá</th>
+                                    <th>Giảm bán</th>
+                                    <th>Giá sách</th>
                                     <th>Số tồn</th>
                                     <th>Hiển thị</th>
                                     <th>Sắp xếp</th>

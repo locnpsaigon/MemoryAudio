@@ -1349,6 +1349,7 @@ namespace MemoryAudio.Controllers
                                     TotalInStock = p.TotalInStock,
                                     Price = p.Price,
                                     Discount = p.Discount,
+                                    MSRP = p.MSRP,
                                     Image1 = p.Image1,
                                     Image2 = p.Image2,
                                     Image3 = p.Image3,
@@ -1445,7 +1446,7 @@ namespace MemoryAudio.Controllers
                     model.SortOrder = sortOrder;
                     model.Products = query.ToPagedList<ProductInfo>(page == 0 ? 1 : page, pageSize);
                     model.PageIndex = model.Products.PageNumber;
-                    model.PageSize = model.PageSize;
+                    model.PageSize = model.Products.PageSize;
 
                     /*
                      * CREATE OPTION SELECTORS
@@ -1494,6 +1495,7 @@ namespace MemoryAudio.Controllers
                 {
                     model.Price = "0";
                     model.Discount = "0";
+                    model.MSRP = "0";
                     model.TotalInStock = "1";
                     model.Display = 1;
 
@@ -1543,6 +1545,7 @@ namespace MemoryAudio.Controllers
                     // Validate inputs
                     var price = (decimal)0;
                     var discount = (decimal)0;
+                    var msrp = (decimal)0;
                     var quantity = 0;
                     var sortidx = 1000;
                     if (decimal.TryParse(model.Price.Replace(",", ""), out price) == false)
@@ -1552,6 +1555,10 @@ namespace MemoryAudio.Controllers
                     if (decimal.TryParse(model.Discount.Replace(",", ""), out discount) == false)
                     {
                         throw new Exception("Giảm giá sản phẩm không hợp lệ! Giảm giá sản phẩm phải là số.");
+                    }
+                    if (decimal.TryParse(model.MSRP.Replace(",", ""), out msrp) == false)
+                    {
+                        throw new Exception("Giá niêm yết không hợp lệ! Giá niêm yết phải là số.");
                     }
                     if (int.TryParse(model.TotalInStock.Replace(",", ""), out quantity) == false)
                     {
@@ -1570,6 +1577,7 @@ namespace MemoryAudio.Controllers
                     newProduct.TotalInStock = quantity;
                     newProduct.Price = price;
                     newProduct.Discount = discount;
+                    newProduct.MSRP = msrp;
                     newProduct.Image1 = model.Image1;
                     newProduct.Image2 = model.Image2;
                     newProduct.Image3 = model.Image3;
@@ -1644,6 +1652,7 @@ namespace MemoryAudio.Controllers
                     model.Specification = product.Specification;
                     model.Price = product.Price.ToString();
                     model.Discount = product.Discount.ToString();
+                    model.MSRP = product.MSRP.ToString();
                     model.Image1 = product.Image1;
                     model.Image2 = product.Image2;
                     model.Image3 = product.Image3;
@@ -1690,6 +1699,7 @@ namespace MemoryAudio.Controllers
                     // Validate inputs
                     var price = (decimal)0;
                     var discount = (decimal)0;
+                    var msrp = (decimal)0;
                     var quantity = 0;
                     var sortidx = 1000;
                     if (decimal.TryParse(model.Price.Replace(",", ""), out price) == false)
@@ -1699,6 +1709,10 @@ namespace MemoryAudio.Controllers
                     if (decimal.TryParse(model.Discount.Replace(",", ""), out discount) == false)
                     {
                         throw new Exception("Giảm giá sản phẩm không hợp lệ! Giảm giá sản phẩm phải là số.");
+                    }
+                    if (decimal.TryParse(model.MSRP.Replace(",", ""), out msrp) == false)
+                    {
+                        throw new Exception("Giá niêm yết không hợp lệ! Giá niêm yết phải là số.");
                     }
                     if (int.TryParse(model.TotalInStock.Replace(",", ""), out quantity) == false)
                     {
@@ -1724,6 +1738,7 @@ namespace MemoryAudio.Controllers
                         product.TotalInStock = quantity;
                         product.Price = price;
                         product.Discount = discount;
+                        product.MSRP = msrp;
                         product.Image1 = model.Image1;
                         product.Image2 = model.Image2;
                         product.Image3 = model.Image3;

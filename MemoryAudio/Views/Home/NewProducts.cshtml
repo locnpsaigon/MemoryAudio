@@ -67,8 +67,10 @@
                         {
                             if (item.Discount <= 0)
                             {
-                                <span>Giá:</span>
-                                <span class="text-danger"><strong>@item.Price.ToString("#,###")Đ</strong></span>
+                                <p>
+                                    <span>Giá:</span>
+                                    <span class="text-danger"><strong>@item.Price.ToString("#,##0")Đ</strong></span>
+                                </p>
                             }
                             else
                             {
@@ -76,16 +78,20 @@
                                 var discountPercent = (item.Discount / item.Price) * 100;
                                 if (finalPrice < 0) { finalPrice = 0; }
                                 if (discountPercent < 0) { discountPercent = 0; }
-                                <span>Giá:</span>
-                                <span class="text-danger"><strong>@finalPrice.ToString("#,###")Đ</strong></span>
-                                <span style="text-decoration:line-through;color:grey;">@item.Price.ToString("#,###")Đ</span>
-                                <span><strong>-@discountPercent.ToString("#,###")%</strong></span>
+                                <p>
+                                    <span>Giá:</span>
+                                    <span class="text-danger"><strong>@finalPrice.ToString("#,##0")Đ</strong></span>
+                                    <span style="text-decoration:line-through;color:dimgray;">@item.Price.ToString("#,##0")Đ</span>
+                                    <span><strong>-@discountPercent.ToString("#,##0")%</strong></span>
+                                </p>
                             }
                         }
                         else
                         {
-                            <span>Giá:</span>
-                            <span class="text-danger"><strong>Liên hệ</strong></span>
+                            <p>
+                                <span>Giá:</span>
+                                <span class="text-danger"><strong>Liên hệ</strong></span>
+                            </p>
                         }
                     </div>
                 }
