@@ -50,7 +50,7 @@ namespace MemoryAudio.Controllers
             }
         }
 
-        public ActionResult Category(String name, string filterText = "", string sortOrder = "", int page = 1, int pageSize = 12)
+        public ActionResult Category(String name, string filterText = "", string sortOrder = "", int page = 1, int pageSize = 36)
         {
             var model = new CategoryViewModel();
             try
@@ -186,7 +186,7 @@ namespace MemoryAudio.Controllers
             }
         }
 
-        public ActionResult NewProducts(string filterText = "", string sortOrder = "", int page = 1, int pageSize = 12)
+        public ActionResult NewProducts(string filterText = "", string sortOrder = "", int page = 1, int pageSize = 36)
         {
             var model = new NewProductsViewModel();
             try
@@ -277,7 +277,7 @@ namespace MemoryAudio.Controllers
             }
         }
 
-        public ActionResult HotProducts(string filterText = "", string sortOrder = "", int page = 1, int pageSize = 12)
+        public ActionResult HotProducts(string filterText = "", string sortOrder = "", int page = 1, int pageSize = 36)
         {
             var model = new HotProductsViewModel();
             try
@@ -484,7 +484,7 @@ namespace MemoryAudio.Controllers
             }
         }
 
-        public ActionResult Promotion(int page = 1, int pageSize = 12)
+        public ActionResult Promotion(int page = 1, int pageSize = 36)
         {
             try
             {
@@ -515,7 +515,7 @@ namespace MemoryAudio.Controllers
             }
         }
 
-        public ActionResult Reviews(int page = 1, int pageSize = 12)
+        public ActionResult Reviews(int page = 1, int pageSize = 36)
         {
             try
             {

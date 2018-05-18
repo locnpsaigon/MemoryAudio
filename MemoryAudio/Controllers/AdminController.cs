@@ -227,7 +227,7 @@ namespace MemoryAudio.Controllers
         #region Users
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
-        public ActionResult Users(int status = 0, string filterText = "", int page = 1, int pageSize = 12)
+        public ActionResult Users(int status = 0, string filterText = "", int page = 1, int pageSize = 36)
         {
             try
             {
@@ -550,7 +550,7 @@ namespace MemoryAudio.Controllers
 
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
-        public ActionResult Roles(string filterText = "", int page = 1, int pageSize = 12)
+        public ActionResult Roles(string filterText = "", int page = 1, int pageSize = 36)
         {
             try
             {
@@ -1127,7 +1127,7 @@ namespace MemoryAudio.Controllers
         #region Brands
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
-        public ActionResult Brands(string filterText = "", int page = 1, int pageSize = 12)
+        public ActionResult Brands(string filterText = "", int page = 1, int pageSize = 36)
         {
             try
             {
@@ -1323,7 +1323,7 @@ namespace MemoryAudio.Controllers
         #region Products
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
-        public ActionResult Products(string filterText = "", int categoryId = 0, int brandId = 0, int display = 0, string sortOrder = "", int page = 1, int pageSize = 12)
+        public ActionResult Products(string filterText = "", int categoryId = 0, int brandId = 0, int display = 0, string sortOrder = "", int page = 1, int pageSize = 36)
         {
             try
             {
@@ -1819,7 +1819,7 @@ namespace MemoryAudio.Controllers
         #region News
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
-        public ActionResult News(string filterText = "", int type = 0, int status = 0, int page = 1, int pageSize = 12)
+        public ActionResult News(string filterText = "", int type = 0, int status = 0, int page = 1, int pageSize = 36)
         {
             try
             {
