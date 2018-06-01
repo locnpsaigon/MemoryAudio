@@ -52,6 +52,7 @@
                                     <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" />
                                     <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
                                     <a href="/Admin/AddProduct" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                                    <a href="javascript:exportExcel();" class="btn btn-sm btn-success" style="width:50px;"><i class="glyphicon glyphicon-export"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -59,6 +60,7 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
+                                    <th>Hình ảnh</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Loại sản phẩm</th>
                                     <th>Nhãn hiệu</th>
@@ -75,12 +77,24 @@
                             <tbody>
                                 @{
                                     var rowIndex = Model.Products.FirstItemOnPage;
+                                    var unitInStock = 0;
                                     foreach (var item in Model.Products)
                                     {
+                                        unitInStock += item.TotalInStock;
+
                                         var finalPrice = item.Price - item.Discount;
                                         if (finalPrice < 0) { finalPrice = 0; }
+
                                         <tr>
                                             <td class="text-center">@rowIndex</td>
+                                            @if (string.IsNullOrWhiteSpace(item.Image1))
+                                            {
+                                                <td class="text-center"><img src="https://memoryaudio.ddns.net/Content/img/no-image.png" width="128"></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center"><img src="@item.Image1" width="128"></td>
+                                            }
                                             <td><a href="/Admin/EditProduct?id=@item.ProductId">@item.ProductName</a></td>
                                             <td class="text-nowrap">@item.CategoryName</td>
                                             <td class="text-nowrap">@item.BrandName</td>
@@ -117,11 +131,18 @@
                                         </tr>
                                         rowIndex++;
                                     }
+                                    <!--Add total rows-->
+                                    <tr>
+                                        <td colspan="9" class="text-right">Tổng cộng</td>
+                                        <td class="text-right text-danger">@unitInStock.ToString("#,##0")</td>
+                                        <td colspan="3">Hiển thị</td>
+                                    </tr>
                                 }
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>STT</th>
+                                    <th>Hình ảnh</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Loại sản phẩm</th>
                                     <th>Nhãn hiệu</th>
@@ -207,6 +228,15 @@
             var pageIndex = $("#pageIndex").val();
             var pageSize = $("#selectPageSize").val();
             var url = "/Admin/Products?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrer=" + sortOrder + "&page=" + pageIndex + "&pageSize=" + pageSize;
+            window.location.replace(url);
+        }
+        function exportExcel() {
+            var filterText = $("#inputSearch").val();
+            var categoryId = $("#CategoryId").val();
+            var brandId = $("#BrandId").val();
+            var display = $("#Display").val();
+            var sortOrder = $("#selectSortOrder").val();
+            var url = "/Admin/ProductsToExcel?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrer=" + sortOrder;
             window.location.replace(url);
         }
 

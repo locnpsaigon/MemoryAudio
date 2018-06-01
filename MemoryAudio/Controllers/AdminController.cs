@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using PagedList;
 using PagedList.Mvc;
+using OfficeOpenXml;
 using MemoryAudio.Models.Context;
 using MemoryAudio.Models.Entities;
 using MemoryAudio.Models.Admin;
@@ -21,6 +23,7 @@ namespace MemoryAudio.Controllers
     public class AdminController : BaseController
     {
         // GET: Admin
+        [Authorize]
         public ActionResult Index()
         {
             //EventLogs.Write("Test");
@@ -1486,6 +1489,165 @@ namespace MemoryAudio.Controllers
 
         [Authorize]
         [AdminAuthorize(Roles = "Administrators")]
+        public ActionResult ProductsToExcel(string filterText = "", int categoryId = 0, int brandId = 0, int display = 0, string sortOrder = "")
+        {
+            try
+            {
+                // query products
+                using (var db = new DBContext())
+                {
+                    var query = from p in db.Products
+                                join c in db.Categories on p.CategoryId equals c.CategoryId into pc
+                                join b in db.Brands on p.BrandId equals b.BrandId into pb
+                                join d in db.DisplayStatuses on p.Display equals d.Id into pd
+                                from j1 in pc.DefaultIfEmpty()
+                                from j2 in pb.DefaultIfEmpty()
+                                from j3 in pd.DefaultIfEmpty()
+                                select new ProductInfo
+                                {
+                                    ProductId = p.ProductId,
+                                    ProductName = p.ProductName,
+                                    CategoryId = p.CategoryId,
+                                    CategoryName = j1.CategoryName,
+                                    BrandId = p.BrandId,
+                                    BrandName = j2.BrandName,
+                                    Specification = p.Specification,
+                                    TotalInStock = p.TotalInStock,
+                                    Price = p.Price,
+                                    Discount = p.Discount,
+                                    MSRP = p.MSRP,
+                                    Image1 = p.Image1,
+                                    Image2 = p.Image2,
+                                    Image3 = p.Image3,
+                                    Image4 = p.Image4,
+                                    Image5 = p.Image5,
+                                    Image6 = p.Image6,
+                                    CreationDate = p.CreationDate,
+                                    Display = p.Display,
+                                    DisplayName = j3.Name,
+                                    SortIdx = p.SortIdx
+                                };
+                    // Filtering 
+                    if (categoryId > 0)
+                    {
+                        // Filter by category
+                        var category = db.Categories.Where(r => r.CategoryId == categoryId).FirstOrDefault();
+                        if (category != null)
+                        {
+                            // Create parent node
+                            var parent = new CategoryTreeNode();
+                            parent.CategoryId = category.CategoryId;
+                            parent.CategoryName = category.CategoryName;
+                            parent.Description = category.Description;
+                            parent.Level = 0;
+                            parent.Parent = null;
+                            parent.Nodes = new List<CategoryTreeNode>();
+                            CategoryTree.AppendChildNodes(parent);
+                            var childNodes = parent.GetChildNodes();
+                            var childCategoryIds = new List<int>();
+                            foreach (var node in childNodes)
+                            {
+                                childCategoryIds.Add(node.CategoryId);
+                            }
+                            if (childCategoryIds.Count > 0)
+                            {
+                                query = query.Where(r => childCategoryIds.Contains(r.CategoryId ?? 0));
+                            }
+                        }
+                    }
+                    if (brandId > 0)
+                    {
+                        // Filter by brand
+                        query = query.Where(r => r.BrandId == brandId);
+                    }
+                    if (display > 0)
+                    {
+                        // Filter by display
+                        query = query.Where(r => r.Display == display);
+                    }
+                    if (string.IsNullOrWhiteSpace(filterText) == false)
+                    {
+                        // Fiter by name
+                        query = query.Where(r =>
+                                            r.ProductName.Contains(filterText) ||
+                                            r.CategoryName.Contains(filterText) ||
+                                            r.BrandName.Contains(filterText));
+                    }
+                    // Sorting
+                    switch (sortOrder)
+                    {
+                        case "price":
+                            query = query.OrderBy(p => p.Price);
+                            break;
+
+                        case "price_desc":
+                            query = query.OrderByDescending(p => p.Price);
+                            break;
+
+                        case "name":
+                            query = query.OrderBy(p => p.ProductName);
+                            break;
+
+                        case "name_desc":
+                            query = query.OrderByDescending(p => p.ProductName);
+                            break;
+
+                        default:
+                            query = query.OrderByDescending(p => p.SortIdx);
+                            break;
+                    }
+
+                    var template = new FileInfo(Server.MapPath("~/App_Data/Template_Products_Exported.xlsx"));
+                    using (var package = new ExcelPackage(template))
+                    {
+                        ExcelWorkbook workBook = package.Workbook;
+                        if (workBook != null)
+                        {
+                            if (workBook.Worksheets.Count > 0)
+                            {
+                                ExcelWorksheet currentWorksheet = workBook.Worksheets.First();
+
+                                var rowIndex = 1; // first row is headers
+                                foreach (var item in query.ToList())
+                                {
+                                    var finalPrice = item.Price - item.Discount;
+                                    if (finalPrice < 0) { finalPrice = 0; }
+
+                                    rowIndex++;
+                                    currentWorksheet.Cells[rowIndex, 1].Value = rowIndex - 1;
+                                    currentWorksheet.Cells[rowIndex, 2].Value = item.ProductName;
+                                    currentWorksheet.Cells[rowIndex, 3].Value = item.CategoryName;
+                                    currentWorksheet.Cells[rowIndex, 4].Value = item.BrandName;
+                                    currentWorksheet.Cells[rowIndex, 5].Value = item.Price;
+                                    currentWorksheet.Cells[rowIndex, 6].Value = item.Discount;
+                                    currentWorksheet.Cells[rowIndex, 7].Value = finalPrice;
+                                    currentWorksheet.Cells[rowIndex, 8].Value = item.MSRP;
+                                    currentWorksheet.Cells[rowIndex, 9].Value = item.TotalInStock;
+                                }
+
+                                Response.Clear();
+                                package.SaveAs(Response.OutputStream);
+                                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                                var excel_filename = "Export_Products_" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
+                                Response.AddHeader("content-disposition", "attachment;  filename=" + excel_filename);
+                                Response.End();
+                            }
+                        }
+                    }
+
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                // Write error log
+                EventLogs.Write("AdminController - ProductsToExcel(GET): " + ex.ToString());
+                return RedirectToAction("Index", "Error");
+            }
+        }
+
+        [Authorize]
+        [AdminAuthorize(Roles = "Administrators")]
         public ActionResult AddProduct(int categoryId = 0)
         {
             var model = new AddProductModel();
@@ -1941,7 +2103,7 @@ namespace MemoryAudio.Controllers
 
             try
             {
-                using(var db = new DBContext())
+                using (var db = new DBContext())
                 {
                     // Create type/status selector options
                     model.TypeSelector = db.NewsTypes.OrderBy(r => r.Name)
@@ -1959,7 +2121,7 @@ namespace MemoryAudio.Controllers
                 EventLogs.Write("AdminController - AddNewsModel(POST): " + ex.ToString());
                 ModelState.AddModelError("", ex.Message);
             }
-            
+
             return View(model);
         }
 

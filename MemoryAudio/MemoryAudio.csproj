@@ -4578,6 +4578,7 @@
     <Content Include="Content\bower_components\ckeditor\skins\moono-lisa\readme.md" />
     <Content Include="Content\bower_components\ckeditor\skins\moono\readme.md" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="App_Data\Template_Products_Exported.xlsx" />
     <None Include="Properties\PublishProfiles\MemoryAudio.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
