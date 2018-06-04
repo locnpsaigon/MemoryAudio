@@ -1,136 +1,123 @@
 ﻿@using PagedList.Mvc
 @model MemoryAudio.Models.Admin.UserListViewModel
 @{
-    ViewBag.Title = "Tra cứu tài khoản";
+    ViewBag.Title = "Tài khoản";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 @Html.Hidden("pageIndex", Model.PageIndex)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>Hệ thống</h1>
-    </section>
     <!-- Main content -->
     <section class="content">
+        <h3>@ViewBag.Title</h3>
+        <!--Filtering-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-inline text-left">
+                    <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" style="width:165px;" />
+                    <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
+                    <a href="/Admin/AddUser" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-inline text-right">
+                    Trạng thái:
+                    <select id="selectStatus" class="form-control input-sm">
+                        <option value="0" @(Model.Status == 0 ? "selected" : "")>--Tất cả--</option>
+                        <option value="1" @(Model.Status == 1 ? "selected" : "")>Đang khóa</option>
+                        <option value="2" @(Model.Status == 2 ? "selected" : "")>Đang hoạt động</option>
+                    </select>
+                    Phân trang:
+                    <select id="selectPageSize" class="form-control input-sm">
+                        <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                        <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                        <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                        <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!--Users-->
         <div class="row">
             <div class="col-xs-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">@ViewBag.Title</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="container-fluid">
-                            <div class="row" style="margin-bottom:8px;">
-                                <div class="col-md-6" style="padding-left:0px;">
-                                    <div class="form-inline text-left">
-                                        <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" style="width:165px;" />
-                                        <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
-                                        <a href="/Admin/AddUser" class="btn btn-sm btn-info" style="width:50px;">+</a>
-                                    </div>
-                                </div>
-                                <div class="col-md-6" style="padding-right:0px;">
-                                    <div class="form-inline text-right">
-                                        Trạng thái:
-                                        <select id="selectStatus" class="form-control input-sm">
-                                            <option value="0" @(Model.Status == 0 ? "selected" : "")>--Tất cả--</option>
-                                            <option value="1" @(Model.Status == 1 ? "selected" : "")>Đang khóa</option>
-                                            <option value="2" @(Model.Status == 2 ? "selected" : "")>Đang hoạt động</option>
-                                        </select>
-                                        Phân trang:
-                                        <select id="selectPageSize" class="form-control input-sm">
-                                            <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
-                                            <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
-                                            <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
-                                            <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tài khoản</th>
+                            <th>Họ tên</th>
+                            <th>Điện thoại</th>
+                            <th>Email</th>
+                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rowIndex = Model.Users.FirstItemOnPage;
+                            foreach (var item in Model.Users)
+                            {
+                                <tr>
+                                    <td class="text-center">@rowIndex</td>
+                                    <td><a href="/Admin/EditUser?id=@item.UserId">@item.Username</a></td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @if (item.Status == 1)
+                                        {
+                                            <span class="text-danger">Đang khóa</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Đang hoạt động</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/Admin/EditUser?id=@item.UserId" class="btn btn-xs btn-info">Edit</a>
+                                        <a href="javascript:deleteUser(@item.UserId, '@item.Username')" class="btn btn-xs btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                                rowIndex++;
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tài khoản</th>
+                            <th>Họ tên</th>
+                            <th>Điện thoại</th>
+                            <th>Email</th>
+                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div style="height:8px;"></div>
+                <!--Summay-->
+                @if (Model.Users.TotalItemCount > 0)
+                {
+                    <div class="container-fluid" style="margin:8px 0px;">
+                        <div class="row">
+                            Hiển thị <strong>@Model.Users.FirstItemOnPage</strong> đến <strong>@Model.Users.LastItemOnPage</strong> trên tổng <strong>@Model.Users.TotalItemCount</strong> tài khoản
                         </div>
-                        <table id="example1" class="table table-bordered table-striped" style="margin-bottom:8px;">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Tài khoản</th>
-                                    <th>Họ tên</th>
-                                    <th>Điện thoại</th>
-                                    <th>Email</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var rowIndex = Model.Users.FirstItemOnPage;
-                                    foreach (var item in Model.Users)
-                                    {
-                                        <tr>
-                                            <td class="text-center">@rowIndex</td>
-                                            <td><a href="/Admin/EditUser?id=@item.UserId">@item.Username</a></td>
-                                            <td>@item.FullName</td>
-                                            <td>@item.Phone</td>
-                                            <td>@item.Email</td>
-                                            <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                            <td>
-                                                @if (item.Status == 1)
-                                                {
-                                                    <span class="text-danger">Đang khóa</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-success">Đang hoạt động</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <a href="/Admin/EditUser?id=@item.UserId" class="btn btn-xs btn-info">Edit</a>
-                                                <a href="javascript:deleteUser(@item.UserId, '@item.Username')" class="btn btn-xs btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                        rowIndex++;
-                                    }
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Tài khoản</th>
-                                    <th>Họ tên</th>
-                                    <th>Điện thoại</th>
-                                    <th>Email</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <!--Summay-->
-                        @if (Model.Users.TotalItemCount > 0)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    Hiển thị @Model.Users.FirstItemOnPage đến @Model.Users.LastItemOnPage trên tổng @Model.Users.TotalItemCount tài khoản
-                                </div>
-                            </div>
-                        }
-
-                        <!--Paging-->
-                        @if (Model.Users.PageCount > 1)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    @Html.PagedListPager(Model.Users, page => Url.Action("Users", new { page, pageSize = Model.PageSize, status = Model.Status, filterText = Model.FilterText }))
-                                </div>
-                            </div>
-                        }
                     </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
+                }
+
+                <!--Paging-->
+                @if (Model.Users.PageCount > 1)
+                {
+                    <div class="container-fluid" style="margin:8px 0px;">
+                        <div class="row">
+                            @Html.PagedListPager(Model.Users, page => Url.Action("Users", new { page, pageSize = Model.PageSize, status = Model.Status, filterText = Model.FilterText }))
+                        </div>
+                    </div>
+                }
             </div>
-            <!-- /.col -->
         </div>
         <!-- /.row -->
     </section>

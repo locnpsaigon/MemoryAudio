@@ -1,7 +1,7 @@
 ﻿@using PagedList.Mvc
 @model MemoryAudio.Models.Admin.NewsListViewModel
 @{
-    ViewBag.Title = "Danh mục tin tức";
+    ViewBag.Title = "Tin tức";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 @Html.Hidden("pageIndex", Model.PageIndex)
@@ -9,143 +9,135 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
+        <h3>@ViewBag.Title</h3>
+        <!--Search & sorting-->
         <div class="row">
-            <div class="col-xs-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">@ViewBag.Title</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-8" style="padding-left:0px;">
-                                    <div class="form-inline text-left">
-                                        @Html.DropDownListFor(model => model.Type, Model.TypeSelector, "--Chuyên mục--", new { @class = "form-control input-sm" })
-                                        @Html.DropDownListFor(model => model.Status, Model.StatusSelector, "--Trạng thái--", new { @class = "form-control input-sm" })
-                                    </div>
-                                </div>
-                                <div class="col-md-4" style="padding-right:0px;">
-                                    <div class="form-inline text-right">
-                                        Phân trang:
-                                        <select id="selectPageSize" class="form-control input-sm">
-                                            <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
-                                            <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
-                                            <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
-                                            <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top:8px;">
-                                <div class="form-inline text-left">
-                                    <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" />
-                                    <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
-                                    <a href="/Admin/AddNews" class="btn btn-sm btn-info" style="width:50px;">+</a>
-                                </div>
-                            </div>
-                        </div>
-                        <table id="example1" class="table table-bordered table-striped" style="margin-top:24px;">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Bài viết</th>
-                                    <th>Thể loại</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Phát hành</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var rowIndex = Model.News.FirstItemOnPage;
-                                    foreach (var item in Model.News)
-                                    {
-                                        <tr>
-                                            <td class="text-center">@rowIndex</td>
-                                            <td><a href="/Admin/EditNews?id=@item.NewsId">@item.Title</a></td>
-                                            <td class="text-center">
-                                                @switch (item.Type)
-                                                {
-                                                    case 1:
-                                                        <span class="text-primary">Tin tức</span>
-                                                        break;
-                                                    case 2:
-                                                        <span class="text-primary">Khuyến mãi</span>
-                                                        break;
-                                                    default:
-                                                        <span class="text-gray">-</span>
-                                                        break;
-                                                }
-                                            </td>
-                                            <td class="text-center">
-                                                @switch (item.Status)
-                                                {
-                                                    case 1:
-                                                        <span class="text-gray">Chờ duyệt</span>
-                                                        break;
-                                                    case 2:
-                                                        <span class="text-success">Đăng bài</span>
-                                                        break;
-                                                    case 3:
-                                                        <span class="text-danger">Tin nóng</span>
-                                                        break;
-                                                    case 4:
-                                                        <span class="text-gray">Gỡ bài</span>
-                                                        break;
-                                                    default:
-                                                        <span class="text-gray">-</span>
-                                                        break;
-                                                }
-                                            </td>
-                                            <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                            <td>@item.ReleaseDate.ToString("dd/MM/yyyy")</td>
-                                            <td>
-                                                <a href="/Admin/EditNews?id=@item.NewsId" class="btn btn-xs btn-info">Edit</a>
-                                                <a href="javascript:deleteNews(@item.NewsId, '@item.Title')" class="btn btn-xs btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                        rowIndex++;
-                                    }
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Bài viết</th>
-                                    <th>Thể loại</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Phát hành</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <!--Summay-->
-                        @if (Model.News.TotalItemCount > 0)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    Hiển thị @Model.News.FirstItemOnPage đến @Model.News.LastItemOnPage trên tổng @Model.News.TotalItemCount sản phẩm
-                                </div>
-                            </div>
-                        }
-                        <!--Paging-->
-                        @if (Model.News.PageCount > 1)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    @Html.PagedListPager(Model.News, page => Url.Action("News", new { page, pageSize = Model.PageSize, type = Model.Type, status = Model.Status, filterText = Model.FilterText }))
-                                </div>
-                            </div>
-                        }
-                    </div>
-                    <!-- /.box-body -->
+            <div class="col-md-8">
+                <div class="form-inline text-left">
+                    @Html.DropDownListFor(model => model.Type, Model.TypeSelector, "--Chuyên mục--", new { @class = "form-control input-sm" })
+                    @Html.DropDownListFor(model => model.Status, Model.StatusSelector, "--Trạng thái--", new { @class = "form-control input-sm" })
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
+            <div class="col-md-4">
+                <div class="form-inline text-right">
+                    Phân trang:
+                    <select id="selectPageSize" class="form-control input-sm">
+                        <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                        <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                        <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                        <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div style="height:12px;"></div>
+                <div class="form-inline text-left">
+                    <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" />
+                    <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
+                    <a href="/Admin/AddNews" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                </div>
+            </div>
+        </div>
+        <!--News-->
+        <div class="row">
+            <div style="height:24px;"></div>
+            <div class="col-xs-12">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Bài viết</th>
+                            <th>Thể loại</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Phát hành</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rowIndex = Model.News.FirstItemOnPage;
+                            foreach (var item in Model.News)
+                            {
+                                <tr>
+                                    <td class="text-center">@rowIndex</td>
+                                    <td><a href="/Admin/EditNews?id=@item.NewsId">@item.Title</a></td>
+                                    <td class="text-center">
+                                        @switch (item.Type)
+                                        {
+                                            case 1:
+                                                <span class="text-primary">Tin tức</span>
+                                                break;
+                                            case 2:
+                                                <span class="text-primary">Khuyến mãi</span>
+                                                break;
+                                            default:
+                                                <span class="text-gray">-</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @switch (item.Status)
+                                        {
+                                            case 1:
+                                                <span class="text-gray">Chờ duyệt</span>
+                                                break;
+                                            case 2:
+                                                <span class="text-success">Đăng bài</span>
+                                                break;
+                                            case 3:
+                                                <span class="text-danger">Tin nóng</span>
+                                                break;
+                                            case 4:
+                                                <span class="text-gray">Gỡ bài</span>
+                                                break;
+                                            default:
+                                                <span class="text-gray">-</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@item.ReleaseDate.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <a href="/Admin/EditNews?id=@item.NewsId" class="btn btn-xs btn-info">Edit</a>
+                                        <a href="javascript:deleteNews(@item.NewsId, '@item.Title')" class="btn btn-xs btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                                rowIndex++;
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>STT</th>
+                            <th>Bài viết</th>
+                            <th>Thể loại</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Phát hành</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <!--Summay-->
+                @if (Model.News.TotalItemCount > 0)
+                {
+                    <div class="container-fluid" style="margin:8px 0px;">
+                        <div class="row">
+                            Hiển thị <strong>@Model.News.FirstItemOnPage</strong> đến <strong>@Model.News.LastItemOnPage</strong> trên tổng <strong>@Model.News.TotalItemCount</strong> sản phẩm
+                        </div>
+                    </div>
+                }
+                <!--Paging-->
+                @if (Model.News.PageCount > 1)
+                {
+                    <div class="container-fluid" style="margin:8px 0px;">
+                        <div class="row">
+                            @Html.PagedListPager(Model.News, page => Url.Action("News", new { page, pageSize = Model.PageSize, type = Model.Type, status = Model.Status, filterText = Model.FilterText }))
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
         <!-- /.row -->
     </section>

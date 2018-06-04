@@ -10,177 +10,171 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
+        <h3>@ViewBag.Title</h3>
         <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">@ViewBag.Title</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-8" style="padding-left:0px;">
-                                    <div class="form-inline text-left">
-                                        @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelector, "--Tất cả danh mục--", new { @class = "form-control input-sm" })
-                                        @Html.DropDownListFor(model => model.BrandId, Model.BrandSelector, "--Thương hiệu--", new { @class = "form-control input-sm" })
-                                        @Html.DropDownListFor(model => model.Display, Model.DisplaySelector, "--Hiển thị--", new { @class = "form-control input-sm" })
-                                    </div>
-                                </div>
-                                <div class="col-md-4" style="padding-right:0px;">
-                                    <div class="form-inline text-right">
-                                        Phân trang:
-                                        <select id="selectPageSize" class="form-control input-sm">
-                                            <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
-                                            <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
-                                            <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
-                                            <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
-                                        </select>
-                                        Sắp xếp:
-                                        <select id="selectSortOrder" class="form-control input-sm">
-                                            <option value="" @(string.IsNullOrWhiteSpace(Model.SortOrder) ? "selected" : "")>Mặc định</option>
-                                            <option value="price" @(Model.SortOrder.Equals("price") ? "selected" : "")>Giá tiền: tăng dần</option>
-                                            <option value="price_desc" @(Model.SortOrder.Equals("price_desc") ? "selected" : "")>Giá tiền: giảm dần</option>
-                                            <option value="name" @(Model.SortOrder.Equals("name") ? "selected" : "")>Tên sản phẩm: A - Z</option>
-                                            <option value="name_desc" @(Model.SortOrder.Equals("name_desc") ? "selected" : "")>Tên sản phẩm: Z - A</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top:8px;">
-                                <div class="form-inline text-left">
-                                    <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" />
-                                    <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
-                                    <a href="/Admin/AddProduct" class="btn btn-sm btn-info" style="width:50px;">+</a>
-                                    <a href="javascript:exportExcel();" class="btn btn-sm btn-success" style="width:50px;"><i class="glyphicon glyphicon-export"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <table id="example1" class="table table-bordered table-striped" style="margin-top:24px;">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Loại sản phẩm</th>
-                                    <th>Nhãn hiệu</th>
-                                    <th>Giá</th>
-                                    <th>Giảm giá</th>
-                                    <th>Giảm bán</th>
-                                    <th>Giá sách</th>
-                                    <th>Số tồn</th>
-                                    <th>Hiển thị</th>
-                                    <th>Sắp xếp</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    var rowIndex = Model.Products.FirstItemOnPage;
-                                    var unitInStock = 0;
-                                    foreach (var item in Model.Products)
-                                    {
-                                        unitInStock += item.TotalInStock;
-
-                                        var finalPrice = item.Price - item.Discount;
-                                        if (finalPrice < 0) { finalPrice = 0; }
-
-                                        <tr>
-                                            <td class="text-center">@rowIndex</td>
-                                            @if (string.IsNullOrWhiteSpace(item.Image1))
-                                            {
-                                                <td class="text-center"><img src="https://memoryaudio.ddns.net/Content/img/no-image.png" width="128"></td>
-                                            }
-                                            else
-                                            {
-                                                <td class="text-center"><img src="@item.Image1" width="128"></td>
-                                            }
-                                            <td><a href="/Admin/EditProduct?id=@item.ProductId">@item.ProductName</a></td>
-                                            <td class="text-nowrap">@item.CategoryName</td>
-                                            <td class="text-nowrap">@item.BrandName</td>
-                                            <td class="text-right ">@item.Price.ToString("#,##0")</td>
-                                            <td class="text-right">@item.Discount.ToString("#,##0")</td>
-                                            <td class="text-right text-danger">@finalPrice.ToString("#,##0")</td>
-                                            <td class="text-right">@item.MSRP.ToString("#,##0")</td>
-                                            <td class="text-right">@item.TotalInStock.ToString("#,##0")</td>
-                                            <td class="text-center text-nowrap">
-                                                @switch (item.Display)
-                                                {
-                                                    case 1:
-                                                        <span class="text-gray">Ẩn</span>
-                                                        break;
-                                                    case 2:
-                                                        <span class="text-success">Hiển thị</span>
-                                                        break;
-                                                    case 3:
-                                                        <span class="text-warning">Mới</span>
-                                                        break;
-                                                    case 4:
-                                                        <span class="text-danger">Nổi bật</span>
-                                                        break;
-                                                    default:
-                                                        <span class="text-gray">Chưa xác định</span>
-                                                        break;
-                                                }
-                                            </td>
-                                            <td class="text-center">@item.SortIdx</td>
-                                            <td class="text-nowrap">
-                                                <a href="/Admin/EditProduct?id=@item.ProductId" class="btn btn-xs btn-info">Edit</a>
-                                                <a href="javascript:deleteProduct(@item.ProductId, '@item.ProductName')" class="btn btn-xs btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                        rowIndex++;
-                                    }
-                                    <!--Add total rows-->
-                                    <tr>
-                                        <td colspan="9" class="text-right">Tổng cộng</td>
-                                        <td class="text-right text-danger">@unitInStock.ToString("#,##0")</td>
-                                        <td colspan="3">Hiển thị</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Loại sản phẩm</th>
-                                    <th>Nhãn hiệu</th>
-                                    <th>Giá</th>
-                                    <th>Giảm giá</th>
-                                    <th>Giảm bán</th>
-                                    <th>Giá sách</th>
-                                    <th>Số tồn</th>
-                                    <th>Hiển thị</th>
-                                    <th>Sắp xếp</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <!--Summay-->
-                        @if (Model.Products.TotalItemCount > 0)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    Hiển thị @Model.Products.FirstItemOnPage đến @Model.Products.LastItemOnPage trên tổng @Model.Products.TotalItemCount sản phẩm
-                                </div>
-                            </div>
-                        }
-                        <!--Paging-->
-                        @if (Model.Products.PageCount > 1)
-                        {
-                            <div class="container-fluid" style="margin:8px 0px;">
-                                <div class="row">
-                                    @Html.PagedListPager(Model.Products, page => Url.Action("Products", new { page, pageSize = Model.PageSize, categoryId = Model.CategoryId, brandId = Model.BrandId, display = Model.Display, sortOrder = Model.SortOrder, filterText = Model.FilterText }))
-                                </div>
-                            </div>
-                        }
-                    </div>
-                    <!-- /.box-body -->
+            <!--Filters-->
+            <div class="col-md-7">
+                <div class="form-inline text-left">
+                    @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelector, "--Tất cả danh mục--", new { @class = "form-control input-sm" })
+                    @Html.DropDownListFor(model => model.BrandId, Model.BrandSelector, "--Thương hiệu--", new { @class = "form-control input-sm" })
+                    @Html.DropDownListFor(model => model.Display, Model.DisplaySelector, "--Hiển thị--", new { @class = "form-control input-sm" })
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
+            <!--Sorting-->
+            <div class="col-md-5">
+                <div class="form-inline text-right">
+                    Phân trang:
+                    <select id="selectPageSize" class="form-control input-sm">
+                        <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12</option>
+                        <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24</option>
+                        <option value="36" @(Model.PageSize == 36 ? "selected" : "")>36</option>
+                        <option value="72" @(Model.PageSize == 72 ? "selected" : "")>72</option>
+                    </select>
+                    Sắp xếp:
+                    <select id="selectSortOrder" class="form-control input-sm">
+                        <option value="" @(string.IsNullOrWhiteSpace(Model.SortOrder) ? "selected" : "")>Mặc định</option>
+                        <option value="price" @(Model.SortOrder.Equals("price") ? "selected" : "")>Giá tiền: tăng dần</option>
+                        <option value="price_desc" @(Model.SortOrder.Equals("price_desc") ? "selected" : "")>Giá tiền: giảm dần</option>
+                        <option value="name" @(Model.SortOrder.Equals("name") ? "selected" : "")>Tên sản phẩm: A - Z</option>
+                        <option value="name_desc" @(Model.SortOrder.Equals("name_desc") ? "selected" : "")>Tên sản phẩm: Z - A</option>
+                    </select>
+                </div>
+            </div>
+            <!--Search form-->
+            <div class="col-xs-12">
+                <div style="height:12px;"></div>
+                <div class="form-inline text-left">
+                    <input id="inputSearch" type="search" value="@Model.FilterText" class="form-control input-sm" placeholder="Nhập từ khóa tra cứu" style="width:275px;" />
+                    <input id="buttonSearch" type="button" class="btn btn-sm btn-primary" value="Tra cứu" />
+                    <a href="/Admin/AddProduct" class="btn btn-sm btn-info" style="width:50px;">+</a>
+                    <a href="javascript:exportExcel();" class="btn btn-sm btn-success" style="width:50px;"><i class="glyphicon glyphicon-export"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="height:24px;"></div>
+            <div class="col-xs-12">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>STT</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Loại sản phẩm</th>
+                            <th>Nhãn hiệu</th>
+                            <th>Giá</th>
+                            <th>Giảm giá</th>
+                            <th>Giảm bán</th>
+                            <th>Giá sách</th>
+                            <th>Số tồn</th>
+                            <th>Hiển thị</th>
+                            <th>Sắp xếp</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var rowIndex = Model.Products.FirstItemOnPage;
+                            var unitInStock = 0;
+                            foreach (var item in Model.Products)
+                            {
+                                unitInStock += item.TotalInStock;
+
+                                var finalPrice = item.Price - item.Discount;
+                                if (finalPrice < 0) { finalPrice = 0; }
+
+                        <tr>
+                            <td class="text-center">@rowIndex</td>
+                            @if (string.IsNullOrWhiteSpace(item.Image1))
+                                    {
+                                    <td class="text-center"><img src="https://memoryaudio.ddns.net/Content/img/no-image.png" width="128"></td>
+                                    }
+                                    else
+                                    {
+                                    <td class="text-center"><img src="@item.Image1" width="128"></td>
+                                    }
+                            <td><a href="/Admin/EditProduct?id=@item.ProductId">@item.ProductName</a></td>
+                            <td class="text-nowrap">@item.CategoryName</td>
+                            <td class="text-nowrap">@item.BrandName</td>
+                            <td class="text-right ">@item.Price.ToString("#,##0")</td>
+                            <td class="text-right">@item.Discount.ToString("#,##0")</td>
+                            <td class="text-right text-danger">@finalPrice.ToString("#,##0")</td>
+                            <td class="text-right">@item.MSRP.ToString("#,##0")</td>
+                            <td class="text-right">@item.TotalInStock.ToString("#,##0")</td>
+                            <td class="text-center text-nowrap">
+                                @switch (item.Display)
+                                        {
+                                            case 1:
+                                        <span class="text-gray">Ẩn</span>
+                                                break;
+                                            case 2:
+                                        <span class="text-success">Hiển thị</span>
+                                                break;
+                                            case 3:
+                                        <span class="text-warning">Mới</span>
+                                                break;
+                                            case 4:
+                                        <span class="text-danger">Nổi bật</span>
+                                                break;
+                                            default:
+                                        <span class="text-gray">Chưa xác định</span>
+                                                break;
+                                        }
+                            </td>
+                            <td class="text-center">@item.SortIdx</td>
+                            <td class="text-nowrap">
+                                <a href="/Admin/EditProduct?id=@item.ProductId" class="btn btn-xs btn-info">Edit</a>
+                                <a href="javascript:deleteProduct(@item.ProductId, '@item.ProductName')" class="btn btn-xs btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                                rowIndex++;
+                            }
+                                    <!--Add total rows-->
+                        <tr>
+                            <td colspan="9" class="text-right">Tổng cộng</td>
+                            <td class="text-right text-danger">@unitInStock.ToString("#,##0")</td>
+                            <td colspan="3">Hiển thị</td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>STT</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Loại sản phẩm</th>
+                            <th>Nhãn hiệu</th>
+                            <th>Giá</th>
+                            <th>Giảm giá</th>
+                            <th>Giảm bán</th>
+                            <th>Giá sách</th>
+                            <th>Số tồn</th>
+                            <th>Hiển thị</th>
+                            <th>Sắp xếp</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <!--Summay-->
+                @if (Model.Products.TotalItemCount > 0)
+                {
+                <div class="container-fluid" style="margin:8px 0px;">
+                    <div class="row">
+                        Hiển thị <strong>@Model.Products.FirstItemOnPage</strong> đến <strong>@Model.Products.LastItemOnPage</strong> trên tổng <strong>@Model.Products.TotalItemCount</strong> sản phẩm
+                    </div>
+                </div>
+                }
+                <!--Paging-->
+                @if (Model.Products.PageCount > 1)
+                {
+                <div class="container-fluid" style="margin:8px 0px;">
+                    <div class="row">
+                        @Html.PagedListPager(Model.Products, page => Url.Action("Products", new { page, pageSize = Model.PageSize, categoryId = Model.CategoryId, brandId = Model.BrandId, display = Model.Display, sortOrder = Model.SortOrder, filterText = Model.FilterText }))
+                    </div>
+                </div>
+                }
+            </div>
+
         </div>
         <!-- /.row -->
     </section>

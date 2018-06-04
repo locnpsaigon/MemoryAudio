@@ -1,44 +1,26 @@
 ﻿@{
-    ViewBag.Title = "Danh mục sản phẩm";
+    ViewBag.Title = "Phân loại sản phẩm";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>Sản phẩm</h1>
-    </section>
     <!-- Main content -->
     <section class="content">
-        <div class="col-lg-12" style="padding-left:0px;">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">@ViewBag.Title</h3>
+        <h3>@ViewBag.Title</h3>
+        <div class="row">
+            <!--CRUD-->
+            <div class="col-lg-4">
+                <div class="form-inline text-left">
+                    <a href="javascript:add()" class="btn btn-sm btn-success" style="width:50px;">Thêm</a>
+                    <a href="javascript:edit()" class="btn btn-sm btn-primary" style="width:50px;">Sửa</a>
+                    <a href="javascript:remove()" class="btn btn-sm btn-danger" style="width:50px;">Xóa</a>
+                    <a href="javascript:moveUp()" class="btn btn-sm btn-default" style="width:50px;">Lên</a>
+                    <a href="javascript:moveDown()" class="btn btn-sm btn-default" style="width:50px;">Xuống</a>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="container-fluid">
-                        
-                        <div class="row" style="margin-bottom:8px;">
-                            <!--actions-->
-                            <div class="col-lg-4" style="padding-left:0px;">
-                                <div class="form-inline text-left">
-                                    <a href="javascript:add()" class="btn btn-sm btn-success" style="width:50px;">Thêm</a>
-                                    <a href="javascript:edit()" class="btn btn-sm btn-primary" style="width:50px;">Sửa</a>
-                                    <a href="javascript:remove()" class="btn btn-sm btn-danger" style="width:50px;">Xóa</a>
-                                    <a href="javascript:moveUp()" class="btn btn-sm btn-default" style="width:50px;">Lên</a>
-                                    <a href="javascript:moveDown()" class="btn btn-sm btn-default" style="width:50px;">Xuống</a>
-                                </div>
-                            </div>
-                            <!--category tree-->
-                            <div class="col-lg-8" style="padding-left:0px;">
-                                <div id="tree"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
+            </div>
+            <!--Categories-->
+            <div class="col-lg-8">
+                <div id="tree"></div>
             </div>
         </div>
         <div class="clearfix"></div>

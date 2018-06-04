@@ -153,6 +153,8 @@ body {
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
+  background-color:white;
+  overflow-x: auto;
 }
 /* H1 - H6 font */
 h1,
