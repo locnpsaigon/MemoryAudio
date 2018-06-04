@@ -8,6 +8,8 @@ namespace MemoryAudio
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            BundleTable.EnableOptimizations = true;
+
             bundles.IgnoreList.Clear();
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -53,8 +55,6 @@ namespace MemoryAudio
                       "~/Content/bower_components/jvectormap/jquery-jvectormap.css",
                       "~/Content/dist/css/AdminLTE.css",
                       "~/Content/dist/css/skins/_all-skins.min.css"));
-
-            // BundleTable.EnableOptimizations = true;
         }
     }
 }
