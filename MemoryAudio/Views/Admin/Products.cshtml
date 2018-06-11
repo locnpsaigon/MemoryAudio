@@ -221,7 +221,7 @@
             var sortOrder = $("#selectSortOrder").val();
             var pageIndex = $("#pageIndex").val();
             var pageSize = $("#selectPageSize").val();
-            var url = "/Admin/Products?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrer=" + sortOrder + "&page=" + pageIndex + "&pageSize=" + pageSize;
+            var url = "/Admin/Products?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrder=" + sortOrder + "&page=" + pageIndex + "&pageSize=" + pageSize;
             window.location.replace(url);
         }
         function exportExcel() {
@@ -230,7 +230,7 @@
             var brandId = $("#BrandId").val();
             var display = $("#Display").val();
             var sortOrder = $("#selectSortOrder").val();
-            var url = "/Admin/ProductsToExcel?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrer=" + sortOrder;
+            var url = "/Admin/ProductsToExcel?filterText=" + filterText + "&categoryId=" + categoryId + "&brandId=" + brandId + "&display=" + display + "&sortOrder=" + sortOrder;
             window.location.replace(url);
         }
 
