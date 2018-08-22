@@ -3,34 +3,34 @@
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
   xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
-    <loc>http://memoryaudio.ddns.net</loc>
+    <loc>http://memoryaudio.com</loc>
     <image:image>
-      <image:loc>http://memoryaudio.ddns.net/content/img/tannoy_memory.jpg</image:loc>
+      <image:loc>http://memoryaudio.com/content/img/tannoy_memory.jpg</image:loc>
       <image:caption>Memory Audio - Chuyên cung cấp thiết bị audio có nguồn gốc Châu Âu</image:caption>
     </image:image>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Trang-chu</loc>
+    <loc>http://memoryaudio.com/Trang-chu</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Gioi-thieu</loc>
+    <loc>http://memoryaudio.com/Gioi-thieu</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Thanh-toan</loc>
+    <loc>http://memoryaudio.com/Thanh-toan</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/San-pham-moi</loc>
+    <loc>http://memoryaudio.com/San-pham-moi</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/San-pham-noi-bat</loc>
+    <loc>http://memoryaudio.com/San-pham-noi-bat</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Home/Khuyen-mai</loc>
+    <loc>http://memoryaudio.com/Home/Khuyen-mai</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Danh-gia</loc>
+    <loc>http://memoryaudio.com/Danh-gia</loc>
   </url>
   <url>
-    <loc>http://memoryaudio.ddns.net/Lien-he</loc>
+    <loc>http://memoryaudio.com/Lien-he</loc>
   </url>
 </urlset>
