@@ -1,6 +1,11 @@
-User-agent: *
-Sitemap: http://memoryaudio.com/sitemap_location.xml
+User-agent: Googlebot
 Disallow: /App_Data/
+Disallow: /Content/
 Disallow: /bin/
 Disallow: /Admin/
 Disallow: /Views/
+
+User-agent: *
+Allow: /
+
+Sitemap: http://memoryaudio.com/sitemap_location.xml
