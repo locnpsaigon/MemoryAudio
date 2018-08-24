@@ -34,7 +34,7 @@ namespace MemoryAudio.Controllers
             {
                 // Set meta data
                 ViewBag.MetaDescription = "Trang chủ Memory Audio";
-                ViewBag.MetaKeywords = "memory-audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+                ViewBag.MetaKeywords = "memory-audio,am-thanh-chau-au,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
 
                 var model = new HomeViewModel();
                 using (var db = new DBContext())
