@@ -32,6 +32,10 @@ namespace MemoryAudio.Controllers
         {
             try
             {
+                // Set meta data
+                ViewBag.MetaDescription = "Trang chủ Memory Audio";
+                ViewBag.MetaKeywords = "memory-audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                 var model = new HomeViewModel();
                 using (var db = new DBContext())
                 {
@@ -173,6 +177,11 @@ namespace MemoryAudio.Controllers
                     model.Category = category;
                     model.PageIndex = model.Products.PageNumber;
                     model.PageSize = model.Products.PageSize;
+
+                    // Set meta data
+                    ViewBag.MetaDescription = "Memory Audio - " + category.CategoryName;
+                    ViewBag.MetaKeywords = category.CategoryName + ",memory-audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                     return View(model);
                 }
             }
@@ -191,6 +200,10 @@ namespace MemoryAudio.Controllers
             var model = new NewProductsViewModel();
             try
             {
+                // Set meta data
+                ViewBag.MetaDescription = "Memory Audio - Sản phẩm mới";
+                ViewBag.MetaKeywords = "memory audio,new products,san pham moi,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                 using (var db = new DBContext())
                 {
                     model.FilterText = filterText.Trim();
@@ -282,6 +295,10 @@ namespace MemoryAudio.Controllers
             var model = new HotProductsViewModel();
             try
             {
+                // Set meta data
+                ViewBag.MetaDescription = "Memory Audio - Sản phẩm nổi bật";
+                ViewBag.MetaKeywords = "memory audio,hot products,san pham noi bat,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                 using (var db = new DBContext())
                 {
                     model.FilterText = filterText.Trim();
@@ -471,6 +488,14 @@ namespace MemoryAudio.Controllers
                     }
                     model.Product = productInfo;
                     model.RelatedProducts = relatedProducts.Take(AppSettings.PAGE_SIZE).ToList();
+
+                    // Set meta data
+                    ViewBag.MetaDescription = "Memory Audio - " + productInfo.ProductName;
+                    ViewBag.MetaKeywords = 
+                        productInfo.CategoryName + "," + 
+                        productInfo.ProductName + "," + 
+                        productInfo.BrandName + ",memory audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                     return View(model);
                 }
             }
@@ -488,7 +513,7 @@ namespace MemoryAudio.Controllers
         {
             try
             {
-                using(var db = new DBContext())
+                using (var db = new DBContext())
                 {
                     // Get promotion news
                     var promotions = db.News.Where(r => r.Type == 2).OrderByDescending(r => r.ReleaseDate);
@@ -502,6 +527,11 @@ namespace MemoryAudio.Controllers
                     model.News = promotions.ToList().ToPagedList<News>(page == 0 ? 1 : page, pageSize);
                     model.PageIndex = page;
                     model.PageSize = pageSize;
+
+                    // Set meta data
+                    ViewBag.MetaDescription = "Memory Audio - Thông tin khuyến mãi";
+                    ViewBag.MetaKeywords = "memory audio,promotion,khuyen mai,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                     return View(model);
                 }
             }
@@ -533,6 +563,11 @@ namespace MemoryAudio.Controllers
                     model.News = promotions.ToList().ToPagedList<News>(page == 0 ? 1 : page, pageSize);
                     model.PageIndex = page;
                     model.PageSize = pageSize;
+
+                    // Set meta data
+                    ViewBag.MetaDescription = "Memory Audio - Đánh giá sản phẩm";
+                    ViewBag.MetaKeywords = "memory audio,review,danh gia,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                     return View(model);
                 }
             }
@@ -571,6 +606,11 @@ namespace MemoryAudio.Controllers
                     var model = new NewsViewModel();
                     model.News = news;
                     model.RelatedNews = relatedNews;
+
+                    // Set meta data
+                    ViewBag.MetaDescription = "Memory Audio - " + news.Title;
+                    ViewBag.MetaKeywords = news.Tags;
+
                     return View(model);
                 }
             }
@@ -588,38 +628,33 @@ namespace MemoryAudio.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
+            // Set meta data
+            ViewBag.MetaDescription = "Memory Audio - Thông tin thanh toán";
+            ViewBag.MetaKeywords = "payment,thanh toan";
+
             return View();
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
+            // Set meta data
+            ViewBag.MetaDescription = "Memory Audio - Về chúng tôi";
+            ViewBag.MetaKeywords = "about,gioi thieu,intro";
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
+            // Set meta data
+            ViewBag.MetaDescription = "Memory Audio - Thông tin liên hệ";
+            ViewBag.MetaKeywords = "contact,about,gioi thieu,intro";
             return View();
         }
 
         public ActionResult Sitemap()
         {
-            var source = "Center-Klipsch-KG-2.2V-37";
-            var pattern = @"\d+$";
-            var match = Regex.Match(source, pattern);
-            if (match.Success)
-            {
-                Response.Write("<br />matched");
-                Response.Write("<br />Macthed value: " + match.Groups[0].Value);
-            }
-            else
-            {
-                Response.Write("<br />not matched");
-            }
-
             return View();
         }
     }
