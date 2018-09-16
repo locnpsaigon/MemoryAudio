@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - Memory Audio</title>
-    <meta name="description" content="Memory Audio chuyên cung cấp các thiết bị và phụ kiện audio chất lượng cao từ các nhãn hiệu nổi tiếng có nguồn gốc từ Châu Âu...">
-    <meta name="keywords" content="Memory Audio,Tannoy,Kef,Chord,Naim,Qed,Van Den Hul,Audio,Tubes,Ampli đèn,Tubes,Sugden,IncaTech,Magnum,cambridge audio,rega,arcam,audiolab,cyrus,tụ,trở...">
+    @if (ViewBag.MetaDescription != null)
+    {
+        <meta name="description" content="@ViewBag.MetaDescription" />
+    }
+    else
+    {
+        <meta name="description" content="Memory Audio chuyên cung cấp các thiết bị và phụ kiện audio chất lượng cao từ các nhãn hiệu nổi tiếng có nguồn gốc từ Châu Âu...">
+    }
+
+    @if (ViewBag.MetaKeywords != null)
+    {
+        <meta name="keywords" content="@ViewBag.MetaKeywords" />
+    }
+    else
+    {
+        <meta name="keywords" content="Memory Audio,Tannoy,Kef,Chord,Naim,Qed,Van Den Hul,Audio,Tubes,Ampli đèn,Tubes,Sugden,IncaTech,Magnum,cambridge audio,rega,arcam,audiolab,cyrus,tụ,trở...">
+    }
+    
     <!-- META FOR FACEBOOK -->
     <meta content="Memory Audio" property="og:site_name" />
     <meta property="og:url" itemprop="url" content="http://memoryaudio.com" />
@@ -16,7 +32,7 @@
     <meta name="copyright" content="Memory Audio" />
     <meta name="author" content="Memory Audio" />
     <meta name="robots" content="index,follow" />
-    <link rel="alternate" href="http://memoryaudio.com/" hreflang="vi" />
+    <link rel="alternate" href="http://memoryaudio.com/" hreflang="x-default" />
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/css-web")
     @RenderSection("styles", required: false)
