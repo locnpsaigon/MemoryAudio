@@ -70,6 +70,10 @@ namespace MemoryAudio.Controllers
                     var category = db.Categories.Where(r => r.CategoryId == categoryId).FirstOrDefault();
                     if (category != null)
                     {
+                        // Set meta data
+                        ViewBag.MetaDescription = "Memory Audio - " + category.CategoryName;
+                        ViewBag.MetaKeywords = category.CategoryName + ",memory-audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
+
                         // Query products
                         var query = from p in db.Products
                                     join c in db.Categories on p.CategoryId equals c.CategoryId into pc
@@ -168,10 +172,6 @@ namespace MemoryAudio.Controllers
                             page = pageCount;
                         }
                         model.Products = query.ToPagedList<ProductInfo>(page == 0 ? 1 : page, pageSize);
-
-                        // Set meta data
-                        ViewBag.MetaDescription = "Memory Audio - " + category.CategoryName;
-                        ViewBag.MetaKeywords = category.CategoryName + ",memory-audio,audiophile,sound,hifi,stereo,hi-end,hd,ultra-hd,dts,dts-hd";
                     }
                     else
                     {

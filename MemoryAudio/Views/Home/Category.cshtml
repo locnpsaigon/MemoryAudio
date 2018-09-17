@@ -2,7 +2,7 @@
 @using MemoryAudio.Libs
 @model MemoryAudio.Models.Home.CategoryViewModel
 @{
-    ViewBag.Title = Model.Category.CategoryName;
+    ViewBag.Title = Model.Category != null ? Model.Category.CategoryName : "Danh mục sản phẩm không hợp lệ!";
 }
 
 <!-- CONTENT -->
