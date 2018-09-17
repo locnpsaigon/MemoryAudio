@@ -175,7 +175,7 @@ namespace MemoryAudio.Controllers
                     }
                     else
                     {
-                        model.Products = new List<ProductInfo>().ToPagedList(1, pageSize);
+                        throw new Exception("Category not found!");
                     }
 
                     model.Category = category;
