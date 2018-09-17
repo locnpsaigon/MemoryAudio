@@ -1,0 +1,5 @@
+---------------------------------------
+2018-09-17 16:47:39
+HomeController - Category: System.Exception: Category not found!
+   at MemoryAudio.Controllers.HomeController.Category(String name, String filterText, String sortOrder, Int32 page, Int32 pageSize) in Y:\GitHub\MemoryAudio\MemoryAudio\Controllers\HomeController.cs:line 178
+---------------------------------------
