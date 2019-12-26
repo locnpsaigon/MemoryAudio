@@ -1,9 +1,7 @@
 User-agent: Googlebot
 Disallow: /App_Data/
-Disallow: /Content/
 Disallow: /bin/
 Disallow: /Admin/
-Disallow: /Views/
 
 User-agent: *
 Allow: /
