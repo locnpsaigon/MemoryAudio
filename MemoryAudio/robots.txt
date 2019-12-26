@@ -6,4 +6,4 @@ Disallow: /Admin/
 User-agent: *
 Allow: /
 
-Sitemap: http://memoryaudio.com/sitemap_location.xml
+Sitemap: http://memoryaudio.com/sitemap_location.xml 
